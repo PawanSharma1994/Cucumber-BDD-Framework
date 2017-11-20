@@ -12,8 +12,6 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import cucumber.api.Scenario;
 
-
-
 public abstract class ExtentReport{
 
 	private final static String extentReportFile = System.getProperty("user.dir")+"\\Reports\\extentReport.html";

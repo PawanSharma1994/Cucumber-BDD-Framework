@@ -2,7 +2,9 @@ package com.automation.functionLib;
 
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,7 +18,7 @@ public class WebApp extends ExtentReport{
 
 	private static WebDriver driver = null;
 	
-	public static WebDriver getDriver() {
+	public static synchronized WebDriver getDriver() {
 	return driver;
 	}
 	
@@ -37,23 +39,43 @@ public class WebApp extends ExtentReport{
 	}
 
 	public static void elementClick(By webElement){
+		try{
 		driver.findElement(webElement).click();
 		generateReport(LogStatus.PASS,"Clicked on "+webElement.toString());
+		}catch(NoSuchElementException e){
+			generateReport(LogStatus.FAIL,webElement.toString()+" Not found");
+		}catch(ElementNotVisibleException e){
+			generateReport(LogStatus.FAIL,webElement.toString()+" Not Visible");
+		}
 	}
 	
 	public static void elementClick(By webElement,String text){
+		try{
 		driver.findElement(webElement).click();
 		generateReport(LogStatus.PASS,"Clicked on "+text);
+		}catch(NoSuchElementException e){
+			generateReport(LogStatus.FAIL,webElement.toString()+" Not found");
+		}catch(ElementNotVisibleException e){
+			generateReport(LogStatus.FAIL,webElement.toString()+" Not visible");
+		}
 	}
 	
 	public static void submit(By webElement){
+		try{
 		driver.findElement(webElement).submit();
 		generateReport(LogStatus.PASS,"Submit button is clicked");
+		}catch(NoSuchElementException e){
+			generateReport(LogStatus.FAIL,webElement.toString()+" Not found");
+		}
 	}
 	
 	public static void sendKeys(By webElement,String text){
+		try{
 		driver.findElement(webElement).sendKeys(text);
 		generateReport(LogStatus.PASS,"Text is entered in "+webElement.toString());
+		}catch(NoSuchElementException e){
+			generateReport(LogStatus.FAIL,webElement.toString()+" Not found");
+		}
 	}
 	
 	public static void verifyElementPresent(By webElement){
@@ -77,7 +99,11 @@ public class WebApp extends ExtentReport{
 			generateReport(LogStatus.PASS,webElement.toString()+" not found");
 			System.out.println("Element is not found");
 		}
-		
+	}
+	
+	public static void clickByLinkText(String linkText){
+		driver.findElement(By.linkText(linkText)).click();
+		generateReport(LogStatus.PASS,linkText+" is Clicked");
 	}
 	
 	public static void endSession(){
@@ -90,12 +116,10 @@ public class WebApp extends ExtentReport{
 	////////// Action Class Methods //////////////
 	
 	public static void moveToElement(By moveToElement,By clickElement){
-		
 		WebElement moveToElementTemp = driver.findElement(moveToElement);
 		WebElement clickElementTemp  = driver.findElement(clickElement);
 		new Actions(driver).moveToElement(moveToElementTemp).click(clickElementTemp).build().perform();
 		generateReport(LogStatus.PASS,"Clicked on "+clickElement.toString());
-		
 	}
 	
 	public static void selectByVisibleText(By element,String text){
