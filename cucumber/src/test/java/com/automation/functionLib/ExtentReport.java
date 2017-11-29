@@ -12,40 +12,40 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import cucumber.api.Scenario;
 
-public abstract class ExtentReport{
+abstract class ExtentReport {
 
-	private final static String extentReportFile = System.getProperty("user.dir")+"\\Reports\\extentReport.html";
-	private static String extentReportImage = System.getProperty("user.dir")+"\\Reports\\extentImage";
+	private final static String extentReportFile = System.getProperty("user.dir") + "\\Reports\\extentReport.html";
+	private final static String extentReportImage = System.getProperty("user.dir") + "\\Reports\\extentImage";
 	private static ExtentReports extent;
 	private static ExtentTest extentTest;
 
-	static{
-		extent = new ExtentReports(extentReportFile,true);
+	static {
+		extent = new ExtentReports(extentReportFile, true);
 	}
-	
-	public static void getScenarioName(Scenario scenario){
+
+	public static void getScenarioName(Scenario scenario) {
 		System.out.println(scenario.getName());
 		extentTest = extent.startTest(scenario.getName());
 	}
-	
-	public static void generateReport(LogStatus status,String details){
-		try{
-		File src = ((TakesScreenshot)WebApp.getDriver()).getScreenshotAs(OutputType.FILE);
-		File dest = new File(extentReportImage+timeStamp()+".png");
-		FileUtils.copyFile(src, dest);
-		extentTest.log(status,details,extentTest.addBase64ScreenShot(dest.toString()));
-		}catch(IOException e){
+
+	public static void generateReport(LogStatus status, String details) {
+		try {
+			File src = ((TakesScreenshot) WebApp.getDriver()).getScreenshotAs(OutputType.FILE);
+			File dest = new File(extentReportImage + timeStamp() + ".png");
+			FileUtils.copyFile(src, dest);
+			extentTest.log(status, details, extentTest.addBase64ScreenShot(dest.toString()));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void finishReport(){
+
+	public static void finishReport() {
 		extent.endTest(extentTest);
 		extent.flush();
 	}
-	
-	public static String timeStamp(){
+
+	public static String timeStamp() {
 		return new SimpleDateFormat("yyyy-mm-dd hh-mm-ss").format(new Date());
 	}
-	
+
 }

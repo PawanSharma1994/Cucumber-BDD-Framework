@@ -9,12 +9,12 @@ import net.bytebuddy.utility.RandomString;
 public class DataHandler {
 
 	private static String tempData;
-	
-	public static String getDataByIndex(DataTable table,int row,int column){
+
+	public static String getDataByIndex(DataTable table, int row, int column) {
 		List<List<String>> data = table.raw();
 		tempData = data.get(row).get(column).toString();
-		System.out.println("Data from table is:"+tempData);
+		System.out.println("Data from table is:" + tempData);
 		return tempData;
 	}
-	
+
 }
