@@ -5,7 +5,13 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.*;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = { "src/test/java" }, glue = { "com.automation.StepDefinitions" })
+@CucumberOptions(features = { "src/test/java" }, glue = { "com.automation.StepDefinitions" }, tags = {}) // separate
+																											// with
+																											// ,
+																											// to
+																											// pass
+																											// multiple
+																											// tags
 public class CucumberRunner {
-	
+
 }

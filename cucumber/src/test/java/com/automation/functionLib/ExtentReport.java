@@ -39,12 +39,12 @@ abstract class ExtentReport {
 		}
 	}
 
-	public static void finishReport() {
+	static void finishReport() {
 		extent.endTest(extentTest);
 		extent.flush();
 	}
 
-	public static String timeStamp() {
+	private static String timeStamp() {
 		return new SimpleDateFormat("yyyy-mm-dd hh-mm-ss").format(new Date());
 	}
 

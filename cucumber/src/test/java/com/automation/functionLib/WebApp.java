@@ -1,9 +1,11 @@
 package com.automation.functionLib;
 
 import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,7 +14,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import com.relevantcodes.extentreports.LogStatus;
-
 import cucumber.api.Scenario;
 
 public final class WebApp extends ExtentReport {
@@ -43,70 +44,70 @@ public final class WebApp extends ExtentReport {
 		generateReport(LogStatus.INFO, "Opening Browser");
 	}
 
-	public static void elementClick(By webElement) {
+	public static void elementClick(By clickElement) {
 		try {
-			driver.findElement(webElement).click();
-			generateReport(LogStatus.PASS, "Clicked on " + webElement.toString());
+			driver.findElement(clickElement).click();
+			generateReport(LogStatus.PASS, "Clicked on " + clickElement.toString());
 		} catch (NoSuchElementException e) {
-			generateReport(LogStatus.FAIL, webElement.toString() + " Not found");
+			generateReport(LogStatus.FAIL, clickElement.toString() + " Not found");
 		} catch (ElementNotVisibleException e) {
-			generateReport(LogStatus.FAIL, webElement.toString() + " Not Visible");
+			generateReport(LogStatus.FAIL, clickElement.toString() + " Not Visible");
 		}
 	}
 
-	public static void elementClick(By webElement, String text) {
+	public static void elementClick(By clickElement, String text) {
 		try {
-			driver.findElement(webElement).click();
+			driver.findElement(clickElement).click();
 			generateReport(LogStatus.PASS, "Clicked on " + text);
 		} catch (NoSuchElementException e) {
-			generateReport(LogStatus.FAIL, webElement.toString() + " Not found");
+			generateReport(LogStatus.FAIL, clickElement.toString() + " Not found");
 		} catch (ElementNotVisibleException e) {
-			generateReport(LogStatus.FAIL, webElement.toString() + " Not visible");
+			generateReport(LogStatus.FAIL, clickElement.toString() + " Not visible");
 		}
 	}
 
-	public static void submit(By webElement) {
+	public static void submit(By element) {
 		try {
-			driver.findElement(webElement).submit();
+			driver.findElement(element).submit();
 			generateReport(LogStatus.PASS, "Submit button is clicked");
 		} catch (NoSuchElementException e) {
-			generateReport(LogStatus.FAIL, webElement.toString() + " Not found");
+			generateReport(LogStatus.FAIL, element.toString() + " Not found");
 		}
 	}
 
-	public static void sendKeys(By webElement, String text) {
+	public static void sendKeys(By element, String text) {
 		try {
-			driver.findElement(webElement).sendKeys(text);
-			generateReport(LogStatus.PASS, "Text is entered in " + webElement.toString());
+			driver.findElement(element).sendKeys(text);
+			generateReport(LogStatus.PASS, "Text is entered in " + element.toString());
 		} catch (NoSuchElementException e) {
-			generateReport(LogStatus.FAIL, webElement.toString() + " Not found");
+			generateReport(LogStatus.FAIL, element.toString() + " Not found");
 		}
 	}
 
-	public static void verifyElementPresent(By webElement) {
-		int width = driver.findElement(webElement).getSize().getWidth();
+	public static void verifyElementPresent(By element) {
+		int width = driver.findElement(element).getSize().getWidth();
 		if (width != 0) {
-			generateReport(LogStatus.PASS, webElement.toString() + " is present");
+			generateReport(LogStatus.PASS, element.toString() + " is present");
 			System.out.println("Element is present");
 		} else {
-			generateReport(LogStatus.FAIL, webElement.toString() + " not found");
+			generateReport(LogStatus.FAIL, element.toString() + " not found");
 			System.out.println("Element is not found");
 		}
 
 	}
 
-	public static void verifyElementNotPresent(By webElement) {
-		int width = driver.findElement(webElement).getSize().getWidth();
+	public static void verifyElementNotPresent(By element) {
+		int width = driver.findElement(element).getSize().getWidth();
 		if (width != 0) {
-			generateReport(LogStatus.FAIL, webElement.toString() + " is present");
+			generateReport(LogStatus.FAIL, element.toString() + " is present");
 			System.out.println("Element is present");
 		} else {
-			generateReport(LogStatus.PASS, webElement.toString() + " not found");
+			generateReport(LogStatus.PASS, element.toString() + " not found");
 			System.out.println("Element is not found");
 		}
 	}
 
-	public static void clickByLinkText(String linkText) {
+	public static void clickByLinkText(String linkText) throws NoSuchElementException {
 		driver.findElement(By.linkText(linkText)).click();
 		generateReport(LogStatus.PASS, linkText + " is Clicked");
 	}
@@ -118,7 +119,17 @@ public final class WebApp extends ExtentReport {
 		finishReport();
 	}
 
-	////////// Action Class Methods //////////////
+	public static void navigateForward() {
+		driver.navigate().forward();
+	}
+
+	public static void navigateBack() {
+		driver.navigate().back();
+	}
+
+	public static void refreshPage() {
+		driver.navigate().refresh();
+	}
 
 	public static void moveToElement(By moveToElement, By clickElement) {
 		WebElement moveToElementTemp = driver.findElement(moveToElement);
@@ -132,10 +143,25 @@ public final class WebApp extends ExtentReport {
 		generateReport(LogStatus.PASS, "Value " + text + " is selected");
 	}
 
-	public static void jseClick(By clickElement) {
+	public static void jseClick(By clickElement) throws NoSuchElementException {
 		WebElement element = driver.findElement(clickElement);
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
 		executor.executeScript("arguments[0].click();", element);
+	}
+
+	public static void alertHandle(String action, String text) throws NoAlertPresentException {
+
+		Alert alert = driver.switchTo().alert();
+		if (action.equalsIgnoreCase("Accept")) {
+			alert.accept();
+			generateReport(LogStatus.PASS, "Accept Alert");
+		} else if (action.equalsIgnoreCase("Dismiss")) {
+			alert.dismiss();
+			generateReport(LogStatus.PASS, "Dismiss Alert");
+		} else if (action.equalsIgnoreCase("SendKeys")) {
+			alert.sendKeys(text);
+			generateReport(LogStatus.PASS, "Entered the text successfully");
+		}
 	}
 
 }
