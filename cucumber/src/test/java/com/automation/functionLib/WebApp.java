@@ -8,24 +8,30 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.Timeouts;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.relevantcodes.extentreports.LogStatus;
 import cucumber.api.Scenario;
 
 public final class WebApp extends ExtentReport {
 
 	private static WebDriver driver = null;
+	private static WebDriverWait wait = new WebDriverWait(driver, 10L);
 
 	public static synchronized WebDriver getDriver() {
 		return driver;
 	}
 
-	private WebApp() {
-		System.out.println("------");
+	public static synchronized WebDriverWait getWait() {
+		return wait;
 	}
 
 	static {
@@ -46,6 +52,7 @@ public final class WebApp extends ExtentReport {
 
 	public static void elementClick(By clickElement) {
 		try {
+			wait.until(ExpectedConditions.elementToBeClickable(clickElement));
 			driver.findElement(clickElement).click();
 			generateReport(LogStatus.PASS, "Clicked on " + clickElement.toString());
 		} catch (NoSuchElementException e) {
@@ -143,6 +150,11 @@ public final class WebApp extends ExtentReport {
 		generateReport(LogStatus.PASS, "Value " + text + " is selected");
 	}
 
+	public static void selectByIndex(By element, int index) {
+		new Select(driver.findElement(element)).selectByIndex(index);
+		generateReport(LogStatus.PASS, "Index " + index + " is Selected");
+	}
+
 	public static void jseClick(By clickElement) throws NoSuchElementException {
 		WebElement element = driver.findElement(clickElement);
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
@@ -152,6 +164,7 @@ public final class WebApp extends ExtentReport {
 	public static void alertHandle(String action, String text) throws NoAlertPresentException {
 
 		Alert alert = driver.switchTo().alert();
+		
 		if (action.equalsIgnoreCase("Accept")) {
 			alert.accept();
 			generateReport(LogStatus.PASS, "Accept Alert");
