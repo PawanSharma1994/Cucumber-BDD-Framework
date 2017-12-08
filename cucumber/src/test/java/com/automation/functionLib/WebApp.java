@@ -24,7 +24,7 @@ import cucumber.api.Scenario;
 public final class WebApp extends ExtentReport {
 
 	private static WebDriver driver = null;
-	private static WebDriverWait wait = new WebDriverWait(driver, 10L);
+	private static WebDriverWait wait;
 
 	public static synchronized WebDriver getDriver() {
 		return driver;
@@ -38,7 +38,7 @@ public final class WebApp extends ExtentReport {
 		System.setProperty("webdriver.chrome.driver", "G:/chromedriver_win32/chromedriver.exe");
 	}
 
-	public static void open(String URL) {
+	public static final void open(String URL) {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--disable-extensions");
 		options.addArguments("--disable-popup-blocking");
@@ -46,6 +46,7 @@ public final class WebApp extends ExtentReport {
 		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		wait = new WebDriverWait(driver, 10);
 		driver.get(URL);
 		generateReport(LogStatus.INFO, "Opening Browser");
 	}
@@ -164,7 +165,7 @@ public final class WebApp extends ExtentReport {
 	public static void alertHandle(String action, String text) throws NoAlertPresentException {
 
 		Alert alert = driver.switchTo().alert();
-		
+
 		if (action.equalsIgnoreCase("Accept")) {
 			alert.accept();
 			generateReport(LogStatus.PASS, "Accept Alert");
