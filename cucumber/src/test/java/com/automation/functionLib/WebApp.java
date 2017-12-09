@@ -38,7 +38,7 @@ public final class WebApp extends ExtentReport {
 		System.setProperty("webdriver.chrome.driver", "G:/chromedriver_win32/chromedriver.exe");
 	}
 
-	public static final void open(String URL) {
+	public static void open(String URL) {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--disable-extensions");
 		options.addArguments("--disable-popup-blocking");

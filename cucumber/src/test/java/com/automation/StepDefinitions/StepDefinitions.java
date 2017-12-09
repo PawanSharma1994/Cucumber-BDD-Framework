@@ -1,6 +1,13 @@
 package com.automation.StepDefinitions;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.automation.functionLib.DataHandler;
 import com.automation.functionLib.WebApp;
 import com.relevantcodes.extentreports.LogStatus;
@@ -20,8 +27,7 @@ public class StepDefinitions {
 	private By userName = By.name("email");
 	private By password = By.name("pass");
 	private By searchIcon = By.id("search-icon-legacy");
-	private By ratingHover = By.xpath("//*[starts-with(@class,'wh-rating rating_')]"); // *[starts-with(@class,'wh-rating
-																						// rating_')]
+	private By ratingHover = By.xpath("//*[starts-with(@class,'wh-rating rating_')]");
 	private By starClick = By.xpath("//*[@class='wh-rating-choices-holder']/*[5]");
 	private By reviewDropdown = By.xpath("//*[@class='dropdown-title']");
 	private By reviewTextBox = By.name("review");
@@ -79,6 +85,11 @@ public class StepDefinitions {
 		WebApp.sendKeys(searchBox, DataHandler.getDataByIndex(table, 0, 1));
 	}
 
+	@And("^I fetch the text$")
+	public void enterText() {
+		WebApp.sendKeys(searchBox,DataHandler.getXLData("DataSheet1","SearchText"));
+	}
+	
 	@And("^I clicked on searchicon$")
 	public void clickSearchIcon() {
 		WebApp.elementClick(searchIcon);
@@ -113,5 +124,5 @@ public class StepDefinitions {
 	public void submitReview() {
 		WebApp.submit(submitBtn);
 	}
-
+	
 }
