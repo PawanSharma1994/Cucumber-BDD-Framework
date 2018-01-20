@@ -1,4 +1,4 @@
-package com.automation.functionLib;
+package com.automation.commonutils;
 
 import java.util.List;
 import com.codoid.products.exception.FilloException;
@@ -16,7 +16,7 @@ public class DataHandler {
 	private static Connection con;
 	private static Recordset recordsetFetchData;
 	private static Recordset recordsetFetchColumn;
-	private final static String filePath = System.getProperty("user.dir")+"\\TestData\\DataSet.xlsx";
+	private final static String filePath = System.getProperty("user.dir") + "\\TestData\\DataSet.xlsx";
 
 	public static final String getDataByIndex(DataTable table, int row, int column) {
 		List<List<String>> data = table.raw();
@@ -33,12 +33,12 @@ public class DataHandler {
 			recordsetFetchData = con.executeQuery(fetchData);
 			while (recordsetFetchData.next()) {
 				String scenario = recordsetFetchData.getField("Scenario");
-				//System.out.println(scenario);
+				// System.out.println(scenario);
 				String fetchCol = "Select " + colName + " from " + sheetName + " where Scenario='" + scenario + "'";
 				recordsetFetchColumn = con.executeQuery(fetchCol);
 				while (recordsetFetchColumn.next()) {
 					tempDataSet[lowCounter] = recordsetFetchColumn.getField(colName);
-					//System.out.println(tempDataSet[lowCounter]);
+					// System.out.println(tempDataSet[lowCounter]);
 				}
 				++lowCounter;
 			}

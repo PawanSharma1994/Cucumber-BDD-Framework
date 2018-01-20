@@ -1,14 +1,12 @@
 package com.automation.StepDefinitions;
 
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import com.automation.functionLib.DataHandler;
+import com.automation.commonutils.DataHandler;
 import com.automation.functionLib.WebApp;
 import com.relevantcodes.extentreports.LogStatus;
 import cucumber.api.DataTable;
@@ -48,6 +46,7 @@ public class StepDefinitions {
 	public void endSession() {
 		WebApp.endSession();
 	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 
 	@Given("^I navigated to \"([^\"]*)\"$")
@@ -60,7 +59,6 @@ public class StepDefinitions {
 		WebApp.sendKeys(userName, DataHandler.getDataByIndex(table, 1, 0));
 		WebApp.sendKeys(password, DataHandler.getDataByIndex(table, 1, 1));
 		WebApp.elementClick(loginBtn);
-		/// Handling captcha manually
 		Thread.sleep(10000);
 	}
 
@@ -87,9 +85,9 @@ public class StepDefinitions {
 
 	@And("^I fetch the text$")
 	public void enterText() {
-		WebApp.sendKeys(searchBox,DataHandler.getXLData("DataSheet1","SearchText"));
+		WebApp.sendKeys(searchBox, DataHandler.getXLData("DataSheet1", "SearchText"));
 	}
-	
+
 	@And("^I clicked on searchicon$")
 	public void clickSearchIcon() {
 		WebApp.elementClick(searchIcon);
@@ -124,5 +122,5 @@ public class StepDefinitions {
 	public void submitReview() {
 		WebApp.submit(submitBtn);
 	}
-	
+
 }

@@ -1,5 +1,6 @@
 package com.automation.functionLib;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -7,24 +8,25 @@ import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriver.Timeouts;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.automation.commonutils.PropertyFileReader;
 import com.relevantcodes.extentreports.LogStatus;
-import cucumber.api.Scenario;
 
 public final class WebApp extends ExtentReport {
 
 	private static WebDriver driver = null;
 	private static WebDriverWait wait;
+	private static String selectBrowser = "";
 
 	public static synchronized WebDriver getDriver() {
 		return driver;
@@ -38,11 +40,19 @@ public final class WebApp extends ExtentReport {
 		System.setProperty("webdriver.chrome.driver", "G:/chromedriver_win32/chromedriver.exe");
 	}
 
-	public static void open(String URL) {
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--disable-extensions");
-		options.addArguments("--disable-popup-blocking");
-		driver = new ChromeDriver(options);
+	public static void open(String URL) throws IOException {
+
+		selectBrowser = PropertyFileReader.getProperty("Browser");
+		System.out.println("Browser Selected is " + selectBrowser);
+
+		if (selectBrowser.equalsIgnoreCase("Chrome")) {
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--disable-extensions");
+			options.addArguments("--disable-popup-blocking");
+			driver = new ChromeDriver(options);
+		} else if (selectBrowser.equalsIgnoreCase("Firefox")) {
+			driver = new FirefoxDriver();
+		}
 		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -92,7 +102,7 @@ public final class WebApp extends ExtentReport {
 		}
 	}
 
-	public static void verifyElementPresent(By element) {
+	public static void verifyElementPresent(By element) throws NoSuchElementException {
 		int width = driver.findElement(element).getSize().getWidth();
 		if (width != 0) {
 			generateReport(LogStatus.PASS, element.toString() + " is present");
@@ -104,7 +114,7 @@ public final class WebApp extends ExtentReport {
 
 	}
 
-	public static void verifyElementNotPresent(By element) {
+	public static void verifyElementNotPresent(By element) throws NoSuchElementException {
 		int width = driver.findElement(element).getSize().getWidth();
 		if (width != 0) {
 			generateReport(LogStatus.FAIL, element.toString() + " is present");
@@ -115,7 +125,7 @@ public final class WebApp extends ExtentReport {
 		}
 	}
 
-	public static void clickByLinkText(String linkText) throws NoSuchElementException {
+	public static void clickByLinkText(String linkText) throws NoSuchElementException, StaleElementReferenceException {
 		driver.findElement(By.linkText(linkText)).click();
 		generateReport(LogStatus.PASS, linkText + " is Clicked");
 	}
@@ -129,14 +139,17 @@ public final class WebApp extends ExtentReport {
 
 	public static void navigateForward() {
 		driver.navigate().forward();
+		generateReport(LogStatus.INFO, "Navigated forward");
 	}
 
 	public static void navigateBack() {
 		driver.navigate().back();
+		generateReport(LogStatus.INFO, "Navigated to last page");
 	}
 
 	public static void refreshPage() {
 		driver.navigate().refresh();
+		generateReport(LogStatus.INFO, "Page is refreshed");
 	}
 
 	public static void moveToElement(By moveToElement, By clickElement) {
