@@ -41,7 +41,7 @@ public final class WebApp extends ExtentReport {
 	}
 
 	public static void open(String URL) throws IOException {
-
+		int abc =1;
 		selectBrowser = PropertyFileReader.getProperty("Browser");
 		System.out.println("Browser Selected is " + selectBrowser);
 
