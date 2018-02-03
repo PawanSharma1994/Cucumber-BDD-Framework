@@ -14,13 +14,14 @@ import cucumber.api.Scenario;
 
 abstract public class ExtentReport {
 
-	private final static String extentReportFile = System.getProperty("user.dir") + "\\Reports\\extentReport.html";
+	private final static String extentReportFile = System.getProperty("user.dir") + "\\Reports\\";
 	private final static String extentReportImage = System.getProperty("user.dir") + "\\Reports\\extentImage";
 	private static ExtentReports extent;
 	private static ExtentTest extentTest;
 
 	static {
-		extent = new ExtentReports(extentReportFile, true);
+		String reportName = extentReportFile+timeStamp()+"\\extentReport.html";
+		extent = new ExtentReports(reportName, true);
 	}
 
 	public static void getScenarioName(Scenario scenario) {
