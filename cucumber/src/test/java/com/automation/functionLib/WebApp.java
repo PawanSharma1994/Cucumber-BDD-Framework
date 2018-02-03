@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -37,11 +38,12 @@ public final class WebApp extends ExtentReport {
 	}
 
 	static {
-		System.setProperty("webdriver.chrome.driver", "G:/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "G:/SeleniumDrivers/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.edge.driver","G:/SeleniumDrivers/MicrosoftWebDriver_win32/MicrosoftWebDriver.exe");
+		System.setProperty("webdriver.gecko.driver","G:/SeleniumDrivers/geckodriver-v0.19.1-win64/geckodriver.exe");
 	}
 
 	public static void open(String URL) throws IOException {
-		int abc =1;
 		selectBrowser = PropertyFileReader.getProperty("Browser");
 		System.out.println("Browser Selected is " + selectBrowser);
 
@@ -52,13 +54,16 @@ public final class WebApp extends ExtentReport {
 			driver = new ChromeDriver(options);
 		} else if (selectBrowser.equalsIgnoreCase("Firefox")) {
 			driver = new FirefoxDriver();
+		} else if(selectBrowser.equalsIgnoreCase("MSEdge")){
+			driver = new EdgeDriver();
 		}
+		 
 		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		wait = new WebDriverWait(driver, 10);
+		wait = new WebDriverWait(driver, 15);
 		driver.get(URL);
-		generateReport(LogStatus.INFO, "Opening Browser");
+		generateReport(LogStatus.INFO, "Opening Browser"+selectBrowser);
 	}
 
 	public static void elementClick(By clickElement) {
@@ -132,7 +137,6 @@ public final class WebApp extends ExtentReport {
 
 	public static void endSession() {
 		generateReport(LogStatus.INFO, "Browser is closed");
-		driver.close();
 		driver.quit();
 		finishReport();
 	}
@@ -176,7 +180,7 @@ public final class WebApp extends ExtentReport {
 	}
 
 	public static void alertHandle(String action, String text) throws NoAlertPresentException {
-
+		try{
 		Alert alert = driver.switchTo().alert();
 
 		if (action.equalsIgnoreCase("Accept")) {
@@ -189,6 +193,9 @@ public final class WebApp extends ExtentReport {
 			alert.sendKeys(text);
 			generateReport(LogStatus.PASS, "Entered the text successfully");
 		}
+	}catch(NoAlertPresentException e){
+		generateReport(LogStatus.FAIL,"Alert Window is not present");
+	}
 	}
 
 }

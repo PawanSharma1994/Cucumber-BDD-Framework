@@ -20,7 +20,7 @@ import cucumber.api.java.en.When;
 
 public class StepDefinitions {
 
-	private By searchBox = By.id("search");
+	private By searchBox = By.name("search_query");
 	private By loginLink = By.xpath("//*[@class='login']");
 	private By userName = By.name("email");
 	private By password = By.name("pass");
@@ -59,7 +59,6 @@ public class StepDefinitions {
 		WebApp.sendKeys(userName, DataHandler.getDataByIndex(table, 1, 0));
 		WebApp.sendKeys(password, DataHandler.getDataByIndex(table, 1, 1));
 		WebApp.elementClick(loginBtn);
-		Thread.sleep(10000);
 	}
 
 	@And("^I post my status$")
@@ -81,6 +80,7 @@ public class StepDefinitions {
 	@And("^I enter the text$")
 	public void enterSearchText(DataTable table) {
 		WebApp.sendKeys(searchBox, DataHandler.getDataByIndex(table, 0, 1));
+		// id not working for edge browser use name or other attrb
 	}
 
 	@And("^I fetch the text$")
