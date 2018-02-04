@@ -14,7 +14,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -28,6 +30,8 @@ public final class WebApp extends ExtentReport {
 	private static WebDriver driver = null;
 	private static WebDriverWait wait;
 	private static String selectBrowser = "";
+	private static boolean headlessBrowserFlag = false;
+	private static String headlessBrowser = null;
 
 	public static synchronized WebDriver getDriver() {
 		return driver;
@@ -39,31 +43,43 @@ public final class WebApp extends ExtentReport {
 
 	static {
 		System.setProperty("webdriver.chrome.driver", "G:/SeleniumDrivers/chromedriver_win32/chromedriver.exe");
-		System.setProperty("webdriver.edge.driver","G:/SeleniumDrivers/MicrosoftWebDriver_win32/MicrosoftWebDriver.exe");
-		System.setProperty("webdriver.gecko.driver","G:/SeleniumDrivers/geckodriver-v0.19.1-win64/geckodriver.exe");
+		System.setProperty("webdriver.edge.driver",
+				"G:/SeleniumDrivers/MicrosoftWebDriver_win32/MicrosoftWebDriver.exe");
+		System.setProperty("webdriver.gecko.driver", "G:/SeleniumDrivers/geckodriver-v0.19.1-win64/geckodriver.exe");
 	}
 
-	public static void open(String URL) throws IOException {
-		selectBrowser = PropertyFileReader.getProperty("Browser");
+	public static void open(String URL) throws Exception {
+		selectBrowser = PropertyFileReader.getProperty("Browser").trim();
+		headlessBrowser = PropertyFileReader.getProperty("HeadlessBrowser").trim();
+		
 		System.out.println("Browser Selected is " + selectBrowser);
-
+		if (headlessBrowser == null) {
+			throw new Exception("headlessBrowser value is not Set!!");
+		}
+		if(headlessBrowser.equalsIgnoreCase("Yes")){
+			headlessBrowserFlag = true;
+		}
 		if (selectBrowser.equalsIgnoreCase("Chrome")) {
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-extensions");
 			options.addArguments("--disable-popup-blocking");
+			options.setHeadless(headlessBrowserFlag);
 			driver = new ChromeDriver(options);
 		} else if (selectBrowser.equalsIgnoreCase("Firefox")) {
-			driver = new FirefoxDriver();
-		} else if(selectBrowser.equalsIgnoreCase("MSEdge")){
-			driver = new EdgeDriver();
+			FirefoxOptions options = new FirefoxOptions();
+			options.setHeadless(headlessBrowserFlag);
+			driver = new FirefoxDriver(options);
+		} else if (selectBrowser.equalsIgnoreCase("MSEdge")) {
+			EdgeOptions options = new EdgeOptions();
+			driver = new EdgeDriver(options);
 		}
-		 
+
 		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, 15);
 		driver.get(URL);
-		generateReport(LogStatus.INFO, "Opening Browser"+selectBrowser);
+		generateReport(LogStatus.INFO, "Opening Browser: " + selectBrowser);
 	}
 
 	public static void elementClick(By clickElement) {
@@ -180,22 +196,22 @@ public final class WebApp extends ExtentReport {
 	}
 
 	public static void alertHandle(String action, String text) throws NoAlertPresentException {
-		try{
-		Alert alert = driver.switchTo().alert();
+		try {
+			Alert alert = driver.switchTo().alert();
 
-		if (action.equalsIgnoreCase("Accept")) {
-			alert.accept();
-			generateReport(LogStatus.PASS, "Accept Alert");
-		} else if (action.equalsIgnoreCase("Dismiss")) {
-			alert.dismiss();
-			generateReport(LogStatus.PASS, "Dismiss Alert");
-		} else if (action.equalsIgnoreCase("SendKeys")) {
-			alert.sendKeys(text);
-			generateReport(LogStatus.PASS, "Entered the text successfully");
+			if (action.equalsIgnoreCase("Accept")) {
+				alert.accept();
+				generateReport(LogStatus.PASS, "Accept Alert");
+			} else if (action.equalsIgnoreCase("Dismiss")) {
+				alert.dismiss();
+				generateReport(LogStatus.PASS, "Dismiss Alert");
+			} else if (action.equalsIgnoreCase("SendKeys")) {
+				alert.sendKeys(text);
+				generateReport(LogStatus.PASS, "Entered the text successfully");
+			}
+		} catch (NoAlertPresentException e) {
+			generateReport(LogStatus.FAIL, "Alert Window is not present");
 		}
-	}catch(NoAlertPresentException e){
-		generateReport(LogStatus.FAIL,"Alert Window is not present");
 	}
-	}
-
+	
 }
