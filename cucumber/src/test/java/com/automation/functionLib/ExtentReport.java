@@ -2,6 +2,7 @@ package com.automation.functionLib;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.commons.io.FileUtils;
@@ -20,7 +21,8 @@ abstract public class ExtentReport {
 	private static ExtentTest extentTest;
 
 	static {
-		String reportName = extentReportFile+timeStamp()+"\\extentReport.html";
+		String reportName = extentReportFile + timeStamp() + "\\extentReport.html";
+		System.out.println("Report name"+reportName);
 		extent = new ExtentReports(reportName, true);
 	}
 
@@ -46,7 +48,10 @@ abstract public class ExtentReport {
 	}
 
 	private static String timeStamp() {
-		return new SimpleDateFormat("yyyy-mm-dd hh-mm-ss").format(new Date());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
+		Date dateobj = new Date();
+		return df.format(dateobj);
+		//return new SimpleDateFormat("yyyy-mm-dd hh-mm-ss").format(new Date());
 	}
 
 }

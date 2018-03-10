@@ -1,6 +1,5 @@
 package com.automation.functionLib;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -28,16 +27,28 @@ import com.relevantcodes.extentreports.LogStatus;
 public final class WebApp extends ExtentReport {
 
 	private static WebDriver driver = null;
-	private static WebDriverWait wait;
-	private static String selectBrowser = "";
-	private static boolean headlessBrowserFlag = false;
-	private static String headlessBrowser = null;
+	private WebDriverWait wait;
+	private String selectBrowser = "";
+	private boolean headlessBrowserFlag = false;
+	private String headlessBrowser = null;
+	private static WebApp webapp;
 
-	public static synchronized WebDriver getDriver() {
+	private WebApp() {
+		System.out.println("Private Constructor!!");
+	}
+
+	public static WebDriver getDriver() {
 		return driver;
 	}
 
-	public static synchronized WebDriverWait getWait() {
+	public static synchronized WebApp get() {
+		if (webapp == null) {
+			webapp = new WebApp();
+		}
+		return webapp;
+	}
+
+	public synchronized WebDriverWait getWait() {
 		return wait;
 	}
 
@@ -48,15 +59,15 @@ public final class WebApp extends ExtentReport {
 		System.setProperty("webdriver.gecko.driver", "G:/SeleniumDrivers/geckodriver-v0.19.1-win64/geckodriver.exe");
 	}
 
-	public static void open(String URL) throws Exception {
+	public void open(String URL) throws Exception {
 		selectBrowser = PropertyFileReader.getProperty("Browser").trim();
 		headlessBrowser = PropertyFileReader.getProperty("HeadlessBrowser").trim();
-		
+
 		System.out.println("Browser Selected is " + selectBrowser);
 		if (headlessBrowser == null) {
 			throw new Exception("headlessBrowser value is not Set!!");
 		}
-		if(headlessBrowser.equalsIgnoreCase("Yes")){
+		if (headlessBrowser.equalsIgnoreCase("Yes")) {
 			headlessBrowserFlag = true;
 		}
 		if (selectBrowser.equalsIgnoreCase("Chrome")) {
@@ -79,10 +90,10 @@ public final class WebApp extends ExtentReport {
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, 15);
 		driver.get(URL);
-		generateReport(LogStatus.INFO, "Opening Browser: " + selectBrowser);
+		generateReport(LogStatus.PASS, "Opening Browser: " + selectBrowser);
 	}
 
-	public static void elementClick(By clickElement) {
+	public void elementClick(By clickElement) {
 		try {
 			wait.until(ExpectedConditions.elementToBeClickable(clickElement));
 			driver.findElement(clickElement).click();
@@ -94,7 +105,7 @@ public final class WebApp extends ExtentReport {
 		}
 	}
 
-	public static void elementClick(By clickElement, String text) {
+	public void elementClick(By clickElement, String text) {
 		try {
 			driver.findElement(clickElement).click();
 			generateReport(LogStatus.PASS, "Clicked on " + text);
@@ -105,7 +116,7 @@ public final class WebApp extends ExtentReport {
 		}
 	}
 
-	public static void submit(By element) {
+	public void submit(By element) {
 		try {
 			driver.findElement(element).submit();
 			generateReport(LogStatus.PASS, "Submit button is clicked");
@@ -114,7 +125,7 @@ public final class WebApp extends ExtentReport {
 		}
 	}
 
-	public static void sendKeys(By element, String text) {
+	public void sendKeys(By element, String text) {
 		try {
 			driver.findElement(element).sendKeys(text);
 			generateReport(LogStatus.PASS, "Text is entered in " + element.toString());
@@ -123,7 +134,7 @@ public final class WebApp extends ExtentReport {
 		}
 	}
 
-	public static void verifyElementPresent(By element) throws NoSuchElementException {
+	public void verifyElementPresent(By element) throws NoSuchElementException {
 		int width = driver.findElement(element).getSize().getWidth();
 		if (width != 0) {
 			generateReport(LogStatus.PASS, element.toString() + " is present");
@@ -135,7 +146,7 @@ public final class WebApp extends ExtentReport {
 
 	}
 
-	public static void verifyElementNotPresent(By element) throws NoSuchElementException {
+	public void verifyElementNotPresent(By element) throws NoSuchElementException {
 		int width = driver.findElement(element).getSize().getWidth();
 		if (width != 0) {
 			generateReport(LogStatus.FAIL, element.toString() + " is present");
@@ -146,56 +157,56 @@ public final class WebApp extends ExtentReport {
 		}
 	}
 
-	public static void clickByLinkText(String linkText) throws NoSuchElementException, StaleElementReferenceException {
+	public void clickByLinkText(String linkText) throws NoSuchElementException, StaleElementReferenceException {
 		driver.findElement(By.linkText(linkText)).click();
 		generateReport(LogStatus.PASS, linkText + " is Clicked");
 	}
 
-	public static void endSession() {
+	public void endSession() {
 		generateReport(LogStatus.INFO, "Browser is closed");
 		driver.quit();
 		finishReport();
 	}
 
-	public static void navigateForward() {
+	public void navigateForward() {
 		driver.navigate().forward();
 		generateReport(LogStatus.INFO, "Navigated forward");
 	}
 
-	public static void navigateBack() {
+	public void navigateBack() {
 		driver.navigate().back();
 		generateReport(LogStatus.INFO, "Navigated to last page");
 	}
 
-	public static void refreshPage() {
+	public void refreshPage() {
 		driver.navigate().refresh();
 		generateReport(LogStatus.INFO, "Page is refreshed");
 	}
 
-	public static void moveToElement(By moveToElement, By clickElement) {
+	public void moveToElement(By moveToElement, By clickElement) {
 		WebElement moveToElementTemp = driver.findElement(moveToElement);
 		WebElement clickElementTemp = driver.findElement(clickElement);
 		new Actions(driver).moveToElement(moveToElementTemp).click(clickElementTemp).build().perform();
 		generateReport(LogStatus.PASS, "Clicked on " + clickElement.toString());
 	}
 
-	public static void selectByVisibleText(By element, String text) {
+	public void selectByVisibleText(By element, String text) {
 		new Select(driver.findElement(element)).selectByVisibleText(text);
 		generateReport(LogStatus.PASS, "Value " + text + " is selected");
 	}
 
-	public static void selectByIndex(By element, int index) {
+	public void selectByIndex(By element, int index) {
 		new Select(driver.findElement(element)).selectByIndex(index);
 		generateReport(LogStatus.PASS, "Index " + index + " is Selected");
 	}
 
-	public static void jseClick(By clickElement) throws NoSuchElementException {
+	public void jseClick(By clickElement) throws NoSuchElementException {
 		WebElement element = driver.findElement(clickElement);
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
 		executor.executeScript("arguments[0].click();", element);
 	}
 
-	public static void alertHandle(String action, String text) throws NoAlertPresentException {
+	public void alertHandle(String action, String text) throws NoAlertPresentException {
 		try {
 			Alert alert = driver.switchTo().alert();
 
@@ -213,5 +224,9 @@ public final class WebApp extends ExtentReport {
 			generateReport(LogStatus.FAIL, "Alert Window is not present");
 		}
 	}
-	
+
+	public void nonstatic() {
+
+	}
+
 }

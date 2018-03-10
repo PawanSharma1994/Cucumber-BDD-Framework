@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.automation.commonutils.DataHandler;
+import com.automation.commonutils.OCRReader;
 import com.automation.functionLib.WebApp;
 import com.relevantcodes.extentreports.LogStatus;
 import cucumber.api.DataTable;
@@ -44,71 +45,77 @@ public class StepDefinitions {
 
 	@After
 	public void endSession() {
-		WebApp.endSession();
+		WebApp.get().endSession();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 
 	@Given("^I navigated to \"([^\"]*)\"$")
 	public void openURL(String URL) throws Throwable {
-		WebApp.open(URL);
+		WebApp.get().open(URL);
 	}
 
 	@And("^I log into my Account$")
 	public void login(DataTable table) throws InterruptedException {
-		WebApp.sendKeys(userName, DataHandler.getDataByIndex(table, 1, 0));
-		WebApp.sendKeys(password, DataHandler.getDataByIndex(table, 1, 1));
-		WebApp.elementClick(loginBtn);
+		WebApp.get().sendKeys(userName, DataHandler.getDataByIndex(table, 1, 0));
+		WebApp.get().sendKeys(password, DataHandler.getDataByIndex(table, 1, 1));
+		WebApp.get().elementClick(loginBtn);
 	}
 
 	@And("^I post my status$")
 	public void enterStatus() {
-		WebApp.elementClick(statusBox);
-		WebApp.sendKeys(statusBox, "Hello World");
+		WebApp.get().elementClick(statusBox);
+		WebApp.get().sendKeys(statusBox, "Hello World");
 	}
 
 	@When("^I click on element$")
 	public void clickSearchbox() throws Throwable {
-		WebApp.elementClick(searchBox);
+		WebApp.get().elementClick(searchBox);
 	}
 
 	@Then("^I verify the element$")
 	public void verifyElement() {
-		WebApp.verifyElementPresent(searchBox);
+		WebApp.get().verifyElementPresent(searchBox);
 	}
 
 	@And("^I enter the text$")
 	public void enterSearchText(DataTable table) {
-		WebApp.sendKeys(searchBox, DataHandler.getDataByIndex(table, 0, 1));
+		WebApp.get().sendKeys(searchBox, DataHandler.getDataByIndex(table, 0, 1));
 		// id not working for edge browser use name or other attrb
 	}
 
+	@And("^I enter the text as \"([^\"]*)\"$")
+	public void enterText(String searchText){
+		WebApp.get().sendKeys(searchBox, searchText);
+	}
+	
+	
 	@And("^I fetch the text$")
 	public void enterText() {
-		WebApp.sendKeys(searchBox, DataHandler.getXLData("DataSheet1", "SearchText"));
+		WebApp.get().sendKeys(searchBox, DataHandler.getXLData("DataSheet1", "SearchText"));
 	}
 
 	@And("^I clicked on searchicon$")
 	public void clickSearchIcon() {
-		WebApp.elementClick(searchIcon);
+		WebApp.get().elementClick(searchIcon);
 	}
 
 	@When("^I hover over rating and select 5 stars$")
 	public void clickRating() throws InterruptedException {
-		WebApp.moveToElement(ratingHover, starClick);
+		WebApp.get().moveToElement(ratingHover, starClick);
 	}
 
 	@Then("^I navigated to Reviews Page$")
 	public void verifyReviewsPageTitle() {
-		WebApp.verifyElementPresent(reviewDropdown);
+		WebApp.get().verifyElementPresent(reviewDropdown);
 	}
 
 	@And("^I selected \"([^\"]*)\"$")
 	public void selectPolicyDropdown(String text) throws InterruptedException {
-		WebApp.elementClick(reviewDropdown);
-		WebApp.elementClick(health, text);
+		WebApp.get().elementClick(reviewDropdown);
+		WebApp.get().elementClick(health, text);
 		Thread.sleep(5000);
-		WebApp.elementClick(overallRating);
+		WebApp.get().elementClick(overallRating);
 	}
 
 	@And("^I Entered Review in the review text box$")
@@ -120,7 +127,7 @@ public class StepDefinitions {
 
 	@And("^submitted the review$")
 	public void submitReview() {
-		WebApp.submit(submitBtn);
+		WebApp.get().submit(submitBtn);
 	}
 
 }
