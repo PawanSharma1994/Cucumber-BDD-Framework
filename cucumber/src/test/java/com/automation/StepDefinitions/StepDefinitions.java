@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.automation.commonutils.DataHandler;
 import com.automation.commonutils.OCRReader;
+import com.automation.functionLib.SupportedBrowsers;
 import com.automation.functionLib.WebApp;
 import com.relevantcodes.extentreports.LogStatus;
 import cucumber.api.DataTable;
@@ -18,6 +19,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.StepDefAnnotation;
 
 public class StepDefinitions {
 
@@ -52,7 +54,7 @@ public class StepDefinitions {
 
 	@Given("^I navigated to \"([^\"]*)\"$")
 	public void openURL(String URL) throws Throwable {
-		WebApp.get().open(URL);
+		WebApp.get().launchBrowser(URL);
 	}
 
 	@And("^I log into my Account$")
@@ -130,4 +132,5 @@ public class StepDefinitions {
 		WebApp.get().submit(submitBtn);
 	}
 
+	
 }

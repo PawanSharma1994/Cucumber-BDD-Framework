@@ -22,7 +22,7 @@ abstract public class ExtentReport {
 
 	static {
 		String reportName = extentReportFile + timeStamp() + "\\extentReport.html";
-		System.out.println("Report name"+reportName);
+		System.out.println("Report name "+reportName);
 		extent = new ExtentReports(reportName, true);
 	}
 
