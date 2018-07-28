@@ -1,22 +1,24 @@
 package com.automation.commonutils;
 
 import java.util.List;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import com.codoid.products.exception.FilloException;
 import com.codoid.products.fillo.Connection;
 import com.codoid.products.fillo.Fillo;
 import com.codoid.products.fillo.Recordset;
 import cucumber.api.DataTable;
+import cucumber.api.Scenario;
 
-public class DataHandler {
+public class DataHandler implements Log4Interface{
 
 	private static String tempData;
-	private static int tempDataCounter;
-	private static String[] tempDataSet = new String[100];
 	private static Fillo filo = new Fillo();
 	private static Connection con;
 	private static Recordset recordsetFetchData;
-	private static Recordset recordsetFetchColumn;
 	private final static String filePath = System.getProperty("user.dir") + "\\TestData\\DataSet.xlsx";
+	private static String tempScenarioName = "";
+	private Logger logger = LogManager.getLogger(DataHandler.class);
 
 	public static final String getDataByIndex(DataTable table, int row, int column) {
 		List<List<String>> data = table.raw();
@@ -25,35 +27,36 @@ public class DataHandler {
 		return tempData;
 	}
 
-	public static final String getXLData(String sheetName, String colName) {
-		int lowCounter = 0;
+	public static void getScenarioName(Scenario scenario) {
+		tempScenarioName = scenario.getName();
+	}
+
+	public static String getData(String sheetName, String column) throws FilloException {
+		String temp = "";
 		try {
 			con = filo.getConnection(filePath);
-			String fetchData = "Select * from " + sheetName + " where FetchData='Y'";
-			recordsetFetchData = con.executeQuery(fetchData);
+			String queryData = "Select " + column + " from " + sheetName + " Where Scenario='" + tempScenarioName + "'";
+			recordsetFetchData = con.executeQuery(queryData);
 			while (recordsetFetchData.next()) {
-				String scenario = recordsetFetchData.getField("Scenario");
-				// System.out.println(scenario);
-				String fetchCol = "Select " + colName + " from " + sheetName + " where Scenario='" + scenario + "'";
-				recordsetFetchColumn = con.executeQuery(fetchCol);
-				while (recordsetFetchColumn.next()) {
-					tempDataSet[lowCounter] = recordsetFetchColumn.getField(colName);
-					// System.out.println(tempDataSet[lowCounter]);
-				}
-				++lowCounter;
+				temp = recordsetFetchData.getField(column);
+				log.info("Data get from Sheet : " + temp);
 			}
 		} catch (FilloException e) {
-			e.printStackTrace();
+			log.error("FilloException found!!");
 		} finally {
 			closeXLConnection();
 		}
-		return tempDataSet[tempDataCounter++];
+		return temp;
 	}
 
 	private static void closeXLConnection() {
-		recordsetFetchColumn.close();
 		recordsetFetchData.close();
 		con.close();
+	}
+
+	@Override
+	public Logger getLogs() {
+		return logger;
 	}
 
 }

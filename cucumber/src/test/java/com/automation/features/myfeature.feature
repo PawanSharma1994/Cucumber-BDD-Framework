@@ -32,9 +32,11 @@ Feature: Proof of Concept that my framework works
       | Cucumber   |
       | Gherking   |
       | Selenium   |
-#  Scenario: My Fourth Test
-#    Given I navigated to "https://www.youtube.in"
-#    When I click on element
-#    Then I verify the element
-#    And I fetch the text
-#    And I clicked on searchicon
+
+@test5
+  Scenario: My Fourth Test
+    Given I navigated to "https://www.youtube.in"
+    When I click on element
+    Then I verify the element
+    And I fetch the text
+		And I clicked on searchicon

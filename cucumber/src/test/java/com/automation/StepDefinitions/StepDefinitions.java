@@ -1,16 +1,9 @@
 package com.automation.StepDefinitions;
 
-import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import com.automation.commonutils.DataHandler;
-import com.automation.commonutils.OCRReader;
-import com.automation.functionLib.SupportedBrowsers;
 import com.automation.functionLib.WebApp;
-import com.relevantcodes.extentreports.LogStatus;
+import com.codoid.products.exception.FilloException;
 import cucumber.api.DataTable;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -19,7 +12,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.runtime.java.StepDefAnnotation;
 
 public class StepDefinitions {
 
@@ -40,9 +32,10 @@ public class StepDefinitions {
 	private By statusBox = By.name("xhpc_message");
 
 	/////////////////////////////////////////////////////////////////////////////////////////
-	@Before
+	@Before(order=0)
 	public void setUp(Scenario s) {
 		WebApp.getScenarioName(s);
+		DataHandler.getScenarioName(s);
 	}
 
 	@After
@@ -93,8 +86,9 @@ public class StepDefinitions {
 	
 	
 	@And("^I fetch the text$")
-	public void enterText() {
-		WebApp.get().sendKeys(searchBox, DataHandler.getXLData("DataSheet1", "SearchText"));
+	public void enterText() throws FilloException {
+		//WebApp.get().sendKeys(searchBox, DataHandler.getXLData("DataSheet1", "SearchText"));
+		WebApp.get().sendKeys(searchBox,DataHandler.getData("DataSheet1","SearchText"));
 	}
 
 	@And("^I clicked on searchicon$")
