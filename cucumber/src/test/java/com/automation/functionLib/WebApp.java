@@ -47,7 +47,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private WebApp() {
-		log.info("Private Constructor!!");
+		log.info("----");
 	}
 
 	/**
@@ -131,7 +131,6 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		options.addArguments("--disable-popup-blocking");
 		log.info("--disable pop-up blocking--");
 		options.setHeadless(headlessBrowserFlag);
-		chromeLogging(true);
 		driver = new ChromeDriver(options);
 	}
 

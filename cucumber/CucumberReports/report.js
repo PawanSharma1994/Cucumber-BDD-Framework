@@ -6,6 +6,10 @@ formatter.feature({
   "id": "proof-of-concept-that-my-framework-works",
   "keyword": "Feature"
 });
+formatter.before({
+  "duration": 602150400,
+  "status": "passed"
+});
 formatter.background({
   "line": 3,
   "name": "",
@@ -52,24 +56,49 @@ formatter.step({
   "name": "I clicked on searchicon",
   "keyword": "And "
 });
-formatter.match({});
-formatter.result({
-  "status": "undefined"
+formatter.match({
+  "arguments": [
+    {
+      "val": "https://www.youtube.in",
+      "offset": 16
+    }
+  ],
+  "location": "Sapphire_StepDefs.openURL(String)"
 });
-formatter.match({});
 formatter.result({
-  "status": "undefined"
+  "duration": 12982035200,
+  "status": "passed"
 });
-formatter.match({});
-formatter.result({
-  "status": "undefined"
+formatter.match({
+  "location": "Sapphire_StepDefs.clickSearchbox()"
 });
-formatter.match({});
 formatter.result({
-  "status": "undefined"
+  "duration": 1459394987,
+  "status": "passed"
 });
-formatter.match({});
+formatter.match({
+  "location": "Sapphire_StepDefs.verifyElement()"
+});
 formatter.result({
-  "status": "undefined"
+  "duration": 637001814,
+  "status": "passed"
+});
+formatter.match({
+  "location": "Sapphire_StepDefs.enterText()"
+});
+formatter.result({
+  "duration": 1688582400,
+  "status": "passed"
+});
+formatter.match({
+  "location": "Sapphire_StepDefs.clickSearchIcon()"
+});
+formatter.result({
+  "duration": 869700694,
+  "status": "passed"
+});
+formatter.after({
+  "duration": 1857381547,
+  "status": "passed"
 });
 });
