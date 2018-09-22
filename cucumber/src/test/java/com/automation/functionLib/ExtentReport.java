@@ -13,7 +13,7 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import cucumber.api.Scenario;
 
-abstract public class ExtentReport {
+public class ExtentReport {
 
 	private final static String extentReportFile = System.getProperty("user.dir") + "\\Reports\\";
 	private final static String extentReportImage = System.getProperty("user.dir") + "\\Reports\\extentImage";
@@ -42,7 +42,7 @@ abstract public class ExtentReport {
 		}
 	}
 
-	static void finishReport() {
+	public static void finishReport() {
 		extent.endTest(extentTest);
 		extent.flush();
 	}

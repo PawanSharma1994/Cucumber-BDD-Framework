@@ -13,7 +13,22 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class StepDefinitions {
+public class Sapphire_StepDefs {
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+
+	@Before(order = 0)
+	public void setUp(Scenario s) {
+		WebApp.getScenarioName(s);
+		DataHandler.getScenarioName(s);
+	}
+
+	@After
+	public void endSession() {
+		WebApp.get().endSession();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
 
 	private By searchBox = By.name("search_query");
 	private By loginLink = By.xpath("//*[@class='login']");
@@ -30,21 +45,8 @@ public class StepDefinitions {
 	private By loginBtn = By.id("loginbutton");
 	private By captchaEnter = By.xpath("//*[@class='rc-anchor-logo-portrait']");
 	private By statusBox = By.name("xhpc_message");
-
-	/////////////////////////////////////////////////////////////////////////////////////////
-	@Before(order=0)
-	public void setUp(Scenario s) {
-		WebApp.getScenarioName(s);
-		DataHandler.getScenarioName(s);
-	}
-
-	@After
-	public void endSession() {
-		WebApp.get().endSession();
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-
+	
+	
 	@Given("^I navigated to \"([^\"]*)\"$")
 	public void openURL(String URL) throws Throwable {
 		WebApp.get().launchBrowser(URL);
@@ -80,15 +82,15 @@ public class StepDefinitions {
 	}
 
 	@And("^I enter the text as \"([^\"]*)\"$")
-	public void enterText(String searchText){
+	public void enterText(String searchText) {
 		WebApp.get().sendKeys(searchBox, searchText);
 	}
-	
-	
+
 	@And("^I fetch the text$")
 	public void enterText() throws FilloException {
-		//WebApp.get().sendKeys(searchBox, DataHandler.getXLData("DataSheet1", "SearchText"));
-		WebApp.get().sendKeys(searchBox,DataHandler.getData("DataSheet1","SearchText"));
+		// WebApp.get().sendKeys(searchBox, DataHandler.getXLData("DataSheet1",
+		// "SearchText"));
+		WebApp.get().sendKeys(searchBox, DataHandler.getData("DataSheet1", "SearchText"));
 	}
 
 	@And("^I clicked on searchicon$")
@@ -110,7 +112,6 @@ public class StepDefinitions {
 	public void selectPolicyDropdown(String text) throws InterruptedException {
 		WebApp.get().elementClick(reviewDropdown);
 		WebApp.get().elementClick(health, text);
-		Thread.sleep(5000);
 		WebApp.get().elementClick(overallRating);
 	}
 
@@ -126,5 +127,4 @@ public class StepDefinitions {
 		WebApp.get().submit(submitBtn);
 	}
 
-	
 }

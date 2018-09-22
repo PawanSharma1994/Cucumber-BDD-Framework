@@ -13,6 +13,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -27,9 +28,15 @@ import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.automation.commonutils.DataHandler;
 import com.automation.commonutils.Log4Interface;
 import com.automation.commonutils.PropertyFileReader;
 import com.relevantcodes.extentreports.LogStatus;
+
+import cucumber.api.Scenario;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 
 /**
  * @description Class for all selenium web-driver methods with added reporting
@@ -58,6 +65,9 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	 */
 
 	public static WebDriver getDriver() {
+		if (driver == null) {
+			throw new WebDriverException("Webdriver is not initialized!! Check your property file");
+		}
 		return driver;
 	}
 
@@ -87,10 +97,6 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	public Logger getLogs() {
 		return logger;
 	}
-
-//	static {
-//		
-//	}
 
 	/**
 	 * @author pawan
@@ -134,6 +140,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		options.addArguments("--disable-popup-blocking");
 		log.info("--disable pop-up blocking--");
 		options.setHeadless(headlessBrowserFlag);
+		chromeLogging(true);
 		driver = new ChromeDriver(options);
 	}
 
@@ -143,11 +150,11 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		options.setBinary(PropertyFileReader.getProperty("FIREFOX_BINARY_PATH")).toString().trim();
 		options.setHeadless(headlessBrowserFlag);
 		driver = new FirefoxDriver(options);
-		
+
 	}
 
 	private void launchEdge() throws IOException {
-		System.setProperty("webdriver.edge.driver",PropertyFileReader.getProperty("EDGE_DRIVER_PATH").trim());
+		System.setProperty("webdriver.edge.driver", PropertyFileReader.getProperty("EDGE_DRIVER_PATH").trim());
 		EdgeOptions options = new EdgeOptions();
 		driver = new EdgeDriver(options);
 	}
@@ -173,7 +180,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		} catch (ElementNotVisibleException e) {
 			generateReport(LogStatus.FAIL, clickElement.toString() + " Not Visible");
 			log.error("ElementNotVisibleException");
-		}catch(TimeoutException e){
+		} catch (TimeoutException e) {
 			generateReport(LogStatus.FAIL, clickElement.toString() + " Not found");
 			log.error("TimeoutException");
 		}
@@ -213,10 +220,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	public void verifyElementPresent(By element) {
-		int width =0;
-		try{
-		width = driver.findElement(element).getSize().getWidth();
-		} catch (NoSuchElementException e){
+		int width = 0;
+		try {
+			width = driver.findElement(element).getSize().getWidth();
+		} catch (NoSuchElementException e) {
 			System.out.println(width);
 		}
 		if (width != 0) {
