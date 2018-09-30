@@ -16,14 +16,15 @@ import cucumber.api.Scenario;
 public class ExtentReport {
 
 	private final static String extentReportFile = System.getProperty("user.dir") + "\\Reports\\";
-	private final static String extentReportImage = System.getProperty("user.dir") + "\\Reports\\extentImage";
+//	private final static String extentReportImage = System.getProperty("user.dir") + "\\Reports\\extentImage";
+	private static String reportName;
 	private static ExtentReports extent;
 	private static ExtentTest extentTest;
 
 	static {
-		String reportName = extentReportFile + timeStamp() + "\\extentReport.html";
-		System.out.println("Report name "+reportName);
-		extent = new ExtentReports(reportName, true);
+		reportName = extentReportFile + timeStamp();
+		System.out.println("Report name " + reportName);
+		extent = new ExtentReports(reportName + "\\extentReport.html", true);
 	}
 
 	public static void getScenarioName(Scenario scenario) {
@@ -34,7 +35,8 @@ public class ExtentReport {
 	public static void generateReport(LogStatus status, String details) {
 		try {
 			File src = ((TakesScreenshot) WebApp.getDriver()).getScreenshotAs(OutputType.FILE);
-			File dest = new File(extentReportImage + timeStamp() + ".png");
+			// File dest = new File(extentReportImage + timeStamp() + ".png");
+			File dest = new File(reportName + "\\extentImage_" + timeStamp() + ".png");
 			FileUtils.copyFile(src, dest);
 			extentTest.log(status, details, extentTest.addBase64ScreenShot(dest.toString()));
 		} catch (IOException e) {
@@ -51,7 +53,6 @@ public class ExtentReport {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
 		Date dateobj = new Date();
 		return df.format(dateobj);
-		//return new SimpleDateFormat("yyyy-mm-dd hh-mm-ss").format(new Date());
 	}
 
 }

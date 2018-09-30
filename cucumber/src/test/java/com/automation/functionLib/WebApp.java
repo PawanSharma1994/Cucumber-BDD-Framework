@@ -1,6 +1,7 @@
 package com.automation.functionLib;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -22,6 +24,7 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -93,7 +96,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	 * @author pawan
 	 * @param URL
 	 * @throws IOException
-	 * @description to Launch the URL in browser
+	 * @description to Launch the URL in the specific browser
 	 */
 
 	public void launchBrowser(String URL) throws IOException {
@@ -150,17 +153,51 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
-	 * @author pawan
+	 * @author Pawan
 	 * @param clickElement
-	 * @description to click on Web-element
+	 * @description waits until the element becomes click-able
 	 */
 
-	public void elementClick(By clickElement) {
+	public void wait_ClickElement(By clickElement) {
 		try {
 			wait.until(ExpectedConditions.elementToBeClickable(clickElement));
 			driver.findElement(clickElement).click();
 			generateReport(LogStatus.PASS, "Clicked on " + clickElement.toString());
 			log.info("Clicked on the Element: " + clickElement);
+		} catch (TimeoutException e) {
+			generateReport(LogStatus.FAIL, clickElement.toString() + " Not found");
+			log.error("TimeoutException");
+		}
+	}
+
+	/**
+	 * @author pawan
+	 * @param clickElement
+	 * @description waits until the element becomes click-able
+	 */
+
+	public void wait_ClickElement(WebElement clickElement) {
+		try {
+			wait.until(ExpectedConditions.elementToBeClickable(clickElement));
+			clickElement.click();
+			generateReport(LogStatus.PASS, "Clicked on " + clickElement.toString());
+			log.info("Clicked on the Element: " + clickElement);
+		} catch (TimeoutException e) {
+			generateReport(LogStatus.FAIL, clickElement.toString() + " Not found");
+			log.error("TimeoutException");
+		}
+	}
+
+	/**
+	 * @author pawan
+	 * @param clickElement
+	 * @description to click on element
+	 */
+
+	public void elementClick(By clickElement) {
+		try {
+			driver.findElement(clickElement).click();
+			generateReport(LogStatus.PASS, "Clicked on " + clickElement.toString());
 		} catch (StaleElementReferenceException e) {
 			generateReport(LogStatus.FAIL, clickElement.toString() + " Not found");
 			log.error("StaleElementReferenceException");
@@ -170,9 +207,6 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		} catch (ElementNotVisibleException e) {
 			generateReport(LogStatus.FAIL, clickElement.toString() + " Not Visible");
 			log.error("ElementNotVisibleException");
-		} catch (TimeoutException e) {
-			generateReport(LogStatus.FAIL, clickElement.toString() + " Not found");
-			log.error("TimeoutException");
 		}
 	}
 
@@ -188,6 +222,13 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		}
 	}
 
+	/**
+	 * @author pawan
+	 * @param element
+	 * @description to Submit the form (element should be present in between
+	 *              'form' tags
+	 */
+
 	public void submit(By element) {
 		try {
 			driver.findElement(element).submit();
@@ -199,22 +240,72 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		}
 	}
 
+	/**
+	 * @author pawan
+	 * @param element
+	 * @description to Submit the form (element should be present in between
+	 *              'form' tags
+	 */
+	
+	public void submit(WebElement element) {
+		try {
+			element.submit();
+			generateReport(LogStatus.PASS, "Submit button is clicked");
+			log.info("Clicked on Submit button");
+		} catch (NoSuchElementException e) {
+			generateReport(LogStatus.FAIL, element.toString() + " Not found");
+			log.error("NoSuchElementException");
+		}
+	}
+
+	/**
+	 * @author pawan
+	 * @param element
+	 * @param text
+	 * @description to enter the text in the text-box
+	 */
+
 	public void sendKeys(By element, String text) {
 		try {
 			driver.findElement(element).sendKeys(text);
 			generateReport(LogStatus.PASS, "Text is entered in " + element.toString());
 			log.info("Entered the text: " + text);
 		} catch (NoSuchElementException e) {
+			log.error("NoSuchElementException");
 			generateReport(LogStatus.FAIL, element.toString() + " Not found");
 		}
 	}
+
+	/**
+	 * @author pawan
+	 * @param element
+	 * @param text
+	 * @description to enter the text in the text-box
+	 */
+
+	public void sendKeys(WebElement element, String text) {
+		try {
+			element.sendKeys(text);
+			generateReport(LogStatus.PASS, "Text is entered in " + element.toString());
+			log.info("Entered the text: " + text);
+		} catch (NoSuchElementException e) {
+			log.error("NoSuchElementException");
+			generateReport(LogStatus.FAIL, element.toString() + " Not found");
+		}
+	}
+
+	/**
+	 * @author pawan
+	 * @param element
+	 * @description to verify if element is present on the page
+	 */
 
 	public void verifyElementPresent(By element) {
 		int width = 0;
 		try {
 			width = driver.findElement(element).getSize().getWidth();
 		} catch (NoSuchElementException e) {
-			System.out.println(width);
+			log.info("Element not found!!");
 		}
 		if (width != 0) {
 			generateReport(LogStatus.PASS, element.toString() + " is present");
@@ -268,6 +359,35 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		driver.navigate().refresh();
 		generateReport(LogStatus.INFO, "Page is refreshed");
 		log.info("Refreshing page");
+	}
+
+	/**
+	 * @author pawan
+	 * @description close the current opened window
+	 */
+
+	public void closeWindow() {
+		driver.close();
+		generateReport(LogStatus.INFO, "Closing the current window!");
+		log.info("Closing the current window");
+	}
+
+	/**
+	 * @author pawan
+	 * @description Switch to the newly opened window
+	 */
+
+	public void switchToNewWindow() {
+		Set<String> windowHandle = driver.getWindowHandles();
+		try {
+			for (String handles : windowHandle) {
+				log.info("window handles are :\n" + handles);
+				driver.switchTo().window(handles);
+			}
+		} catch (NoSuchWindowException e) {
+			generateReport(LogStatus.FAIL, "Switiching Window not found");
+			log.error("NoSuchWindowException");
+		}
 	}
 
 	public void moveToElement(By moveToElement, By clickElement) {

@@ -54,8 +54,8 @@ public class Sapphire_StepDefs {
 
 	@And("^I log into my Account$")
 	public void login(DataTable table) throws InterruptedException {
-		WebApp.get().sendKeys(userName, DataHandler.getDataByIndex(table, 1, 0));
-		WebApp.get().sendKeys(password, DataHandler.getDataByIndex(table, 1, 1));
+		WebApp.get().sendKeys(userName, DataHandler.getDataFromCucumberTable(table, 1, 0));
+		WebApp.get().sendKeys(password, DataHandler.getDataFromCucumberTable(table, 1, 1));
 		WebApp.get().elementClick(loginBtn);
 	}
 
@@ -77,7 +77,7 @@ public class Sapphire_StepDefs {
 
 	@And("^I enter the text$")
 	public void enterSearchText(DataTable table) {
-		WebApp.get().sendKeys(searchBox, DataHandler.getDataByIndex(table, 0, 1));
+		WebApp.get().sendKeys(searchBox, DataHandler.getDataFromCucumberTable(table, 0, 1));
 		// id not working for edge browser use name or other attrb
 	}
 
@@ -90,7 +90,7 @@ public class Sapphire_StepDefs {
 	public void enterText() throws FilloException {
 		// WebApp.get().sendKeys(searchBox, DataHandler.getXLData("DataSheet1",
 		// "SearchText"));
-		WebApp.get().sendKeys(searchBox, DataHandler.getData("DataSheet1", "SearchText"));
+		WebApp.get().sendKeys(searchBox, DataHandler.getDataFromXL("DataSheet1", "SearchText"));
 	}
 
 	@And("^I clicked on searchicon$")

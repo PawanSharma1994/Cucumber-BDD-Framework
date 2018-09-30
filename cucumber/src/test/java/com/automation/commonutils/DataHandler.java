@@ -20,7 +20,16 @@ public class DataHandler implements Log4Interface{
 	private static String tempScenarioName = "";
 	private Logger logger = LogManager.getLogger(DataHandler.class);
 
-	public static final String getDataByIndex(DataTable table, int row, int column) {
+	/**
+	 * @author pawan
+	 * @param table
+	 * @param row
+	 * @param column
+	 * @return Data present in column
+	 * @throws IndexOutOfBoundsException
+	 */
+	
+	public static final String getDataFromCucumberTable(DataTable table, int row, int column) throws IndexOutOfBoundsException{
 		List<List<String>> data = table.raw();
 		tempData = data.get(row).get(column).toString();
 		System.out.println("Data from table is:" + tempData);
@@ -31,7 +40,15 @@ public class DataHandler implements Log4Interface{
 		tempScenarioName = scenario.getName();
 	}
 
-	public static String getData(String sheetName, String column) throws FilloException {
+	/**
+	 * @author pawan 
+	 * @param sheetName
+	 * @param column
+	 * @return Data Stored in Cell of excel sheet as per given column name
+	 * @throws FilloException
+	 */
+	
+	public static String getDataFromXL(String sheetName, String column) throws FilloException {
 		String temp = "";
 		try {
 			con = filo.getConnection(filePath);
@@ -58,5 +75,4 @@ public class DataHandler implements Log4Interface{
 	public Logger getLogs() {
 		return logger;
 	}
-
 }

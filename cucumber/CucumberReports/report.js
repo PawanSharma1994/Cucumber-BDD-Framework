@@ -1,104 +1,82 @@
-$(document).ready(function() {var formatter = new CucumberHTML.DOMFormatter($('.cucumber-report'));formatter.uri("com/automation/features/myfeature.feature");
+$(document).ready(function() {var formatter = new CucumberHTML.DOMFormatter($('.cucumber-report'));formatter.uri("com/automation/features/PHPTravels.feature");
 formatter.feature({
   "line": 1,
-  "name": "Proof of Concept that my framework works",
+  "name": "Sample test scenarios",
   "description": "",
-  "id": "proof-of-concept-that-my-framework-works",
+  "id": "sample-test-scenarios",
   "keyword": "Feature"
 });
 formatter.before({
-  "duration": 602150400,
+  "duration": 480854186,
   "status": "passed"
 });
-formatter.background({
-  "line": 3,
-  "name": "",
-  "description": "",
-  "type": "background",
-  "keyword": "Background"
-});
 formatter.scenario({
-  "line": 15,
-  "name": "My Second Test",
+  "line": 4,
+  "name": "Login in PHPTravels",
   "description": "",
-  "id": "proof-of-concept-that-my-framework-works;my-second-test",
+  "id": "sample-test-scenarios;login-in-phptravels",
   "type": "scenario",
   "keyword": "Scenario",
   "tags": [
     {
-      "line": 14,
-      "name": "@test2"
+      "line": 3,
+      "name": "@php"
     }
   ]
 });
 formatter.step({
-  "line": 16,
-  "name": "I navigated to \"https://www.youtube.in\"",
+  "line": 5,
+  "name": "I navigated to \"https://www.phptravels.net\"",
   "keyword": "Given "
 });
 formatter.step({
-  "line": 17,
-  "name": "I click on element",
+  "line": 6,
+  "name": "I click on Login icon",
   "keyword": "When "
 });
 formatter.step({
-  "line": 18,
-  "name": "I verify the element",
-  "keyword": "Then "
-});
-formatter.step({
-  "line": 19,
-  "name": "I fetch the text",
-  "keyword": "And "
-});
-formatter.step({
-  "line": 20,
-  "name": "I clicked on searchicon",
+  "line": 7,
+  "name": "I login using credentials",
+  "rows": [
+    {
+      "cells": [
+        "user@phptravels.com",
+        "demouser"
+      ],
+      "line": 8
+    }
+  ],
   "keyword": "And "
 });
 formatter.match({
   "arguments": [
     {
-      "val": "https://www.youtube.in",
+      "val": "https://www.phptravels.net",
       "offset": 16
     }
   ],
   "location": "Sapphire_StepDefs.openURL(String)"
 });
 formatter.result({
-  "duration": 12982035200,
+  "duration": 20394017280,
   "status": "passed"
 });
 formatter.match({
-  "location": "Sapphire_StepDefs.clickSearchbox()"
+  "location": "PhpTravels.click_login_icon()"
 });
 formatter.result({
-  "duration": 1459394987,
+  "duration": 26244263680,
   "status": "passed"
 });
 formatter.match({
-  "location": "Sapphire_StepDefs.verifyElement()"
+  "location": "PhpTravels.loginUser(DataTable)"
 });
 formatter.result({
-  "duration": 637001814,
-  "status": "passed"
-});
-formatter.match({
-  "location": "Sapphire_StepDefs.enterText()"
-});
-formatter.result({
-  "duration": 1688582400,
-  "status": "passed"
-});
-formatter.match({
-  "location": "Sapphire_StepDefs.clickSearchIcon()"
-});
-formatter.result({
-  "duration": 869700694,
+  "duration": 8783152213,
   "status": "passed"
 });
 formatter.after({
-  "duration": 1857381547,
+  "duration": 6248606294,
   "status": "passed"
 });
 });
