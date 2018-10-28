@@ -16,7 +16,6 @@ import cucumber.api.Scenario;
 public class ExtentReport {
 
 	private final static String extentReportFile = System.getProperty("user.dir") + "\\Reports\\";
-//	private final static String extentReportImage = System.getProperty("user.dir") + "\\Reports\\extentImage";
 	private static String reportName;
 	private static ExtentReports extent;
 	private static ExtentTest extentTest;

@@ -24,7 +24,6 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -33,8 +32,9 @@ import com.automation.commonutils.PropertyFileReader;
 import com.relevantcodes.extentreports.LogStatus;
 
 /**
- * @description Class for all selenium web-driver methods with added reporting
- *              and logging features
+ * Class for all selenium web-driver methods with added reporting and logging
+ * features
+ * 
  * @author pawan
  *
  */
@@ -50,12 +50,15 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private WebApp() {
-		log.info("----");
+		if(webapp!=null){
+			throw new RuntimeException("use get method");
+		}
 	}
 
 	/**
+	 * get the instance of web-driver
+	 * 
 	 * @author pawan
-	 * @description get the instance of web-driver
 	 */
 
 	public static WebDriver getDriver() {
@@ -66,9 +69,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * to get the instance of WebApp class which contains customized web-driver
+	 * functions
+	 * 
 	 * @author pawan
-	 * @description to get the instance of WebApp class which contains
-	 *              customized web-driver functions
 	 */
 
 	public static synchronized WebApp get() {
@@ -79,8 +83,9 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * to get the instance of WebdriverWait
+	 * 
 	 * @author pawan
-	 * @description to get the instance of WebdriverWait
 	 */
 
 	public synchronized WebDriverWait getWait() {
@@ -93,10 +98,11 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * to Launch the URL in the specific browser
+	 * 
 	 * @author pawan
 	 * @param URL
 	 * @throws IOException
-	 * @description to Launch the URL in the specific browser
 	 */
 
 	public void launchBrowser(String URL) throws IOException {
@@ -153,9 +159,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * waits until the element becomes click-able
+	 * 
 	 * @author Pawan
 	 * @param clickElement
-	 * @description waits until the element becomes click-able
 	 */
 
 	public void wait_ClickElement(By clickElement) {
@@ -171,9 +178,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * waits until the element becomes click-able
+	 * 
 	 * @author pawan
 	 * @param clickElement
-	 * @description waits until the element becomes click-able
 	 */
 
 	public void wait_ClickElement(WebElement clickElement) {
@@ -189,9 +197,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * to click on element
+	 * 
 	 * @author pawan
 	 * @param clickElement
-	 * @description to click on element
 	 */
 
 	public void elementClick(By clickElement) {
@@ -210,6 +219,13 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		}
 	}
 
+	/**
+	 * To click on Element and print the custom name in report
+	 * 
+	 * @param clickElement
+	 * @param text
+	 */
+
 	public void elementClick(By clickElement, String text) {
 		try {
 			driver.findElement(clickElement).click();
@@ -223,10 +239,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * To Submit the form (element should be present in between 'form' tags
+	 * 
 	 * @author pawan
 	 * @param element
-	 * @description to Submit the form (element should be present in between
-	 *              'form' tags
 	 */
 
 	public void submit(By element) {
@@ -241,12 +257,12 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * To Submit the form (element should be present in between 'form' tags
+	 * 
 	 * @author pawan
 	 * @param element
-	 * @description to Submit the form (element should be present in between
-	 *              'form' tags
 	 */
-	
+
 	public void submit(WebElement element) {
 		try {
 			element.submit();
@@ -259,10 +275,11 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * To enter the text in the text-box
+	 * 
 	 * @author pawan
 	 * @param element
 	 * @param text
-	 * @description to enter the text in the text-box
 	 */
 
 	public void sendKeys(By element, String text) {
@@ -277,10 +294,11 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * To enter the text in the text-box
+	 * 
 	 * @author pawan
 	 * @param element
 	 * @param text
-	 * @description to enter the text in the text-box
 	 */
 
 	public void sendKeys(WebElement element, String text) {
@@ -295,9 +313,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * To verify if element is present on the page
+	 * 
 	 * @author pawan
 	 * @param element
-	 * @description to verify if element is present on the page
 	 */
 
 	public void verifyElementPresent(By element) {
@@ -317,6 +336,13 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	}
 
+	/**
+	 * To verify if element is present on the page
+	 * 
+	 * @author pawan
+	 * @param element
+	 */
+
 	public void verifyElementNotPresent(By element) throws NoSuchElementException {
 		int width = driver.findElement(element).getSize().getWidth();
 		if (width != 0) {
@@ -328,12 +354,25 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		}
 	}
 
+	/**
+	 * To click the link by using link-text property
+	 * @author pawan
+	 * @param linkText
+	 * @throws NoSuchElementException
+	 * @throws StaleElementReferenceException
+	 */
+	
 	public void clickByLinkText(String linkText) throws NoSuchElementException, StaleElementReferenceException {
 		driver.findElement(By.linkText(linkText)).click();
 		generateReport(LogStatus.PASS, linkText + " is Clicked");
 		log.info("Clicked on: " + linkText);
 	}
 
+	/**
+	 * To end the Webdriver Session
+	 * @author pawan
+	 */
+	
 	public void endSession() {
 		generateReport(LogStatus.INFO, "Browser is closed");
 		log.info("--Closing Sesssion--");
@@ -342,12 +381,20 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		finishReport();
 	}
 
+	/**
+	 * To navigate to the next page if it opened earlier 
+	 */
+	
 	public void navigateForward() {
 		driver.navigate().forward();
 		generateReport(LogStatus.INFO, "Navigated forward");
 		log.info("Navigating forward");
 	}
-
+	
+	/**
+	 * To move backward to previous page
+	 */
+	
 	public void navigateBack() {
 		driver.navigate().back();
 		generateReport(LogStatus.INFO, "Navigated to last page");
@@ -355,6 +402,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	}
 
+	/**
+	 * To refresh the current page 
+	 */
+	
 	public void refreshPage() {
 		driver.navigate().refresh();
 		generateReport(LogStatus.INFO, "Page is refreshed");
@@ -362,8 +413,9 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * close the current opened window
+	 * 
 	 * @author pawan
-	 * @description close the current opened window
 	 */
 
 	public void closeWindow() {
@@ -373,8 +425,9 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
+	 * Switch to the newly opened window
+	 * 
 	 * @author pawan
-	 * @description Switch to the newly opened window
 	 */
 
 	public void switchToNewWindow() {
@@ -390,23 +443,51 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		}
 	}
 
+	/**
+	 * Move mouse on element and click on it
+	 * @author pawan
+	 * @param moveToElement
+	 * @param clickElement
+	 */
+	
 	public void moveToElement(By moveToElement, By clickElement) {
 		WebElement moveToElementTemp = driver.findElement(moveToElement);
 		WebElement clickElementTemp = driver.findElement(clickElement);
 		new Actions(driver).moveToElement(moveToElementTemp).click(clickElementTemp).build().perform();
 		generateReport(LogStatus.PASS, "Clicked on " + clickElement.toString());
 	}
+	
+	/**
+	 * Select from Drop-down : Visible text
+	 * @author pawan
+	 * @param element
+	 * @param text
+	 */
 
 	public void selectByVisibleText(By element, String text) {
 		new Select(driver.findElement(element)).selectByVisibleText(text);
 		generateReport(LogStatus.PASS, "Value " + text + " is selected");
 	}
 
+	/**
+	 * Select from drop-down : index
+	 * @author pawan
+	 * @param element
+	 * @param index
+	 */
+	
 	public void selectByIndex(By element, int index) {
 		new Select(driver.findElement(element)).selectByIndex(index);
 		generateReport(LogStatus.PASS, "Index " + index + " is Selected");
 	}
 
+	/**
+	 * To Click on Element using javaScriptExecutor
+	 * @author pawan 
+	 * @param clickElement
+	 * @throws NoSuchElementException
+	 */
+	
 	public void jseClick(By clickElement) throws NoSuchElementException {
 		WebElement element = driver.findElement(clickElement);
 		JavascriptExecutor executor = (JavascriptExecutor) driver;

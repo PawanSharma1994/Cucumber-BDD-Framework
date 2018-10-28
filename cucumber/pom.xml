@@ -119,9 +119,9 @@
 
 	</dependencies>
 
-	<build>
+	<!-- <build>
 		<sourceDirectory>C:\Users\pawan\Sapphire\Cucumber-BDD-Framework\cucumber\src\test\java</sourceDirectory>
-		<testSourceDirectory>C:\Users\pawan\Sapphire\Cucumber-BDD-Framework\cucumber\src\test\java</testSourceDirectory>
+	 	<testSourceDirectory>C:\Users\pawan\Sapphire\Cucumber-BDD-Framework\cucumber\src\test\java</testSourceDirectory>
 		<resources>
 			<resource>
 				<directory>C:\Users\pawan\Sapphire\Cucumber-BDD-Framework\cucumber\src\test\java</directory>
@@ -133,6 +133,6 @@
 			</testResource>
 		</testResources>
 	</build>
-
+ -->
 	<artifactId>sapphire</artifactId>
 </project>

@@ -34,7 +34,7 @@ public class OCRReader {
 	
 	public String fetchTextFromImage_OCR(String imgFileName) {
 		try {
-			String extractedText = OCRReader.getOCR().doOCR(new File(IMAGE_DIRECTORY + imgFileName));
+			String extractedText = itTesseract.doOCR(new File(IMAGE_DIRECTORY + imgFileName));
 			return extractedText;
 		} catch (TesseractException ex) {
 			System.err.println(ex.getMessage());
@@ -42,5 +42,4 @@ public class OCRReader {
 		}
 	}
 
-	
 }

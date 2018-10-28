@@ -48,7 +48,7 @@ public class PhpTravels {
 		WebApp.get().sendKeys(username, DataHandler.getDataFromCucumberTable(table, 0, 0));
 		WebApp.get().sendKeys(password, DataHandler.getDataFromCucumberTable(table, 0, 1));
 		WebApp.get().wait_ClickElement(loginBtn);
-		Thread.sleep(7000);
+		Thread.sleep(4000);
 	}
 
 }
