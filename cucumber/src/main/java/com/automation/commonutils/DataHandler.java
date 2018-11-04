@@ -16,7 +16,7 @@ public class DataHandler implements Log4Interface{
 	private static Fillo filo = new Fillo();
 	private static Connection con;
 	private static Recordset recordsetFetchData;
-	private final static String filePath = System.getProperty("user.dir") + "\\TestData\\DataSet.xlsx";
+	private static final String FILEPATH = System.getProperty("user.dir") + "\\TestData\\DataSet.xlsx";
 	private static String tempScenarioName = "";
 	private Logger logger = LogManager.getLogger(DataHandler.class);
 
@@ -31,8 +31,8 @@ public class DataHandler implements Log4Interface{
 	
 	public static final String getDataFromCucumberTable(DataTable table, int row, int column) throws IndexOutOfBoundsException{
 		List<List<String>> data = table.raw();
-		tempData = data.get(row).get(column).toString();
-		System.out.println("Data from table is:" + tempData);
+		tempData = data.get(row).get(column);
+		log.info("Data from table is:" + tempData);
 		return tempData;
 	}
 
@@ -51,7 +51,7 @@ public class DataHandler implements Log4Interface{
 	public static String getDataFromXL(String sheetName, String column) throws FilloException {
 		String temp = "";
 		try {
-			con = filo.getConnection(filePath);
+			con = filo.getConnection(FILEPATH);
 			String queryData = "Select " + column + " from " + sheetName + " Where Scenario='" + tempScenarioName + "'";
 			recordsetFetchData = con.executeQuery(queryData);
 			while (recordsetFetchData.next()) {

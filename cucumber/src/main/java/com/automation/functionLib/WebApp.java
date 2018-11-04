@@ -28,6 +28,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.automation.commonutils.Log4Interface;
+import com.automation.commonutils.PDFReader;
 import com.automation.commonutils.PropertyFileReader;
 import com.relevantcodes.extentreports.LogStatus;
 
@@ -43,15 +44,15 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	private static WebDriver driver = null;
 	private WebDriverWait wait;
-	private String selectBrowser = "";
+	private String selectBrowser = null;
 	private boolean headlessBrowserFlag = false;
 	private String headlessBrowser = null;
 	private static WebApp webapp;
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private WebApp() {
-		if(webapp!=null){
-			throw new RuntimeException("use get method");
+		if (webapp != null) {
+			throw new RuntimeException("use get() method");
 		}
 	}
 
@@ -105,7 +106,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	 * @throws IOException
 	 */
 
-	public void launchBrowser(String URL) throws IOException {
+	public void launchBrowser(String url) throws IOException {
 		selectBrowser = PropertyFileReader.getProperty("TEST_BROWSER").trim();
 		headlessBrowser = PropertyFileReader.getProperty("HEADLESS_MODE").trim();
 		log.info("Browser Selected is " + selectBrowser);
@@ -126,9 +127,9 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		log.info("--maximizing window--");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, 15);
-		driver.get(URL);
-		log.info("Launching URL: " + URL + " in: " + selectBrowser);
-		generateReport(LogStatus.PASS, "Launching URL: " + URL + " in: " + selectBrowser);
+		driver.get(url);
+		log.info("Launching URL: " + url + " in: " + selectBrowser);
+		generateReport(LogStatus.PASS, "Launching URL: " + url + " in: " + selectBrowser);
 	}
 
 	private void launchChrome() throws IOException {
@@ -146,7 +147,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	private void launchFireFox() throws IOException {
 		System.setProperty("webdriver.gecko.driver", PropertyFileReader.getProperty("FIREFOX_DRIVER_PATH").trim());
 		FirefoxOptions options = new FirefoxOptions();
-		options.setBinary(PropertyFileReader.getProperty("FIREFOX_BINARY_PATH")).toString().trim();
+		options.setBinary(PropertyFileReader.getProperty("FIREFOX_BINARY_PATH")).toString();
 		options.setHeadless(headlessBrowserFlag);
 		driver = new FirefoxDriver(options);
 
@@ -165,7 +166,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	 * @param clickElement
 	 */
 
-	public void wait_ClickElement(By clickElement) {
+	public void waitClickElement(By clickElement) {
 		try {
 			wait.until(ExpectedConditions.elementToBeClickable(clickElement));
 			driver.findElement(clickElement).click();
@@ -184,7 +185,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	 * @param clickElement
 	 */
 
-	public void wait_ClickElement(WebElement clickElement) {
+	public void waitClickElement(WebElement clickElement) {
 		try {
 			wait.until(ExpectedConditions.elementToBeClickable(clickElement));
 			clickElement.click();
@@ -309,6 +310,8 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 		} catch (NoSuchElementException e) {
 			log.error("NoSuchElementException");
 			generateReport(LogStatus.FAIL, element.toString() + " Not found");
+		} catch (IllegalArgumentException e) {
+			log.error("IllegalArgumentException");
 		}
 	}
 
@@ -343,7 +346,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	 * @param element
 	 */
 
-	public void verifyElementNotPresent(By element) throws NoSuchElementException {
+	public void verifyElementNotPresent(By element) {
 		int width = driver.findElement(element).getSize().getWidth();
 		if (width != 0) {
 			generateReport(LogStatus.FAIL, element.toString() + " is present");
@@ -356,13 +359,14 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	/**
 	 * To click the link by using link-text property
+	 * 
 	 * @author pawan
 	 * @param linkText
 	 * @throws NoSuchElementException
 	 * @throws StaleElementReferenceException
 	 */
-	
-	public void clickByLinkText(String linkText) throws NoSuchElementException, StaleElementReferenceException {
+
+	public void clickByLinkText(String linkText) {
 		driver.findElement(By.linkText(linkText)).click();
 		generateReport(LogStatus.PASS, linkText + " is Clicked");
 		log.info("Clicked on: " + linkText);
@@ -370,9 +374,10 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	/**
 	 * To end the Webdriver Session
+	 * 
 	 * @author pawan
 	 */
-	
+
 	public void endSession() {
 		generateReport(LogStatus.INFO, "Browser is closed");
 		log.info("--Closing Sesssion--");
@@ -382,19 +387,19 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
-	 * To navigate to the next page if it opened earlier 
+	 * To navigate to the next page if it opened earlier
 	 */
-	
+
 	public void navigateForward() {
 		driver.navigate().forward();
 		generateReport(LogStatus.INFO, "Navigated forward");
 		log.info("Navigating forward");
 	}
-	
+
 	/**
 	 * To move backward to previous page
 	 */
-	
+
 	public void navigateBack() {
 		driver.navigate().back();
 		generateReport(LogStatus.INFO, "Navigated to last page");
@@ -403,13 +408,24 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
-	 * To refresh the current page 
+	 * To refresh the current page
 	 */
-	
+
 	public void refreshPage() {
 		driver.navigate().refresh();
 		generateReport(LogStatus.INFO, "Page is refreshed");
 		log.info("Refreshing page");
+	}
+
+	/**
+	 * Get URL of current opened tab
+	 * 
+	 * @author pawan
+	 * @return
+	 */
+
+	public String getCurrentURL() {
+		return driver.getCurrentUrl();
 	}
 
 	/**
@@ -445,20 +461,22 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	/**
 	 * Move mouse on element and click on it
+	 * 
 	 * @author pawan
 	 * @param moveToElement
 	 * @param clickElement
 	 */
-	
+
 	public void moveToElement(By moveToElement, By clickElement) {
 		WebElement moveToElementTemp = driver.findElement(moveToElement);
 		WebElement clickElementTemp = driver.findElement(clickElement);
 		new Actions(driver).moveToElement(moveToElementTemp).click(clickElementTemp).build().perform();
 		generateReport(LogStatus.PASS, "Clicked on " + clickElement.toString());
 	}
-	
+
 	/**
 	 * Select from Drop-down : Visible text
+	 * 
 	 * @author pawan
 	 * @param element
 	 * @param text
@@ -471,11 +489,12 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	/**
 	 * Select from drop-down : index
+	 * 
 	 * @author pawan
 	 * @param element
 	 * @param index
 	 */
-	
+
 	public void selectByIndex(By element, int index) {
 		new Select(driver.findElement(element)).selectByIndex(index);
 		generateReport(LogStatus.PASS, "Index " + index + " is Selected");
@@ -483,18 +502,19 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	/**
 	 * To Click on Element using javaScriptExecutor
-	 * @author pawan 
+	 * 
+	 * @author pawan
 	 * @param clickElement
 	 * @throws NoSuchElementException
 	 */
-	
-	public void jseClick(By clickElement) throws NoSuchElementException {
+
+	public void jseClick(By clickElement) {
 		WebElement element = driver.findElement(clickElement);
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
 		executor.executeScript("arguments[0].click();", element);
 	}
 
-	public void alertHandle(String action, String text) throws NoAlertPresentException {
+	public void alertHandle(String action, String text) {
 		try {
 			Alert alert = driver.switchTo().alert();
 
@@ -510,6 +530,35 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 			}
 		} catch (NoAlertPresentException e) {
 			generateReport(LogStatus.FAIL, "Alert Window is not present");
+		}
+	}
+
+	/**
+	 * Get the text from pdf if it is opened in the current tab
+	 * 
+	 * @author pawan
+	 * @return
+	 * @throws IOException
+	 */
+
+	public String getTextFromPDFCurrentURL() throws IOException {
+		return PDFReader.getPDFReader().getTextFromPDF(getCurrentURL());
+	}
+
+	/**
+	 * Verify text if it is present in the pdf file
+	 * 
+	 * @author pawan
+	 * @param matchers
+	 * @throws IOException
+	 */
+
+	public void verifyPDFContainsText(String matchers) throws IOException {
+		String pdftext = PDFReader.getPDFReader().getTextFromPDF(getCurrentURL());
+		if (pdftext.contains(matchers)) {
+			generateReport(LogStatus.PASS, "Text found in pdf file!!");
+		} else {
+			generateReport(LogStatus.FAIL, "Text not found in pdf file!!");
 		}
 	}
 

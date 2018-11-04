@@ -37,8 +37,8 @@ public class PhpTravels {
 
 	@When("^I click on Login icon$")
 	public void click_login_icon() throws InterruptedException {
-		WebApp.get().wait_ClickElement(myAccountLink);
-		WebApp.get().wait_ClickElement(loginLink);
+		WebApp.get().waitClickElement(myAccountLink);
+		WebApp.get().waitClickElement(loginLink);
 
 	}
 
@@ -47,8 +47,7 @@ public class PhpTravels {
 		WebApp.get().switchToNewWindow();
 		WebApp.get().sendKeys(username, DataHandler.getDataFromCucumberTable(table, 0, 0));
 		WebApp.get().sendKeys(password, DataHandler.getDataFromCucumberTable(table, 0, 1));
-		WebApp.get().wait_ClickElement(loginBtn);
-		Thread.sleep(4000);
+		WebApp.get().waitClickElement(loginBtn);
 	}
 
 }
