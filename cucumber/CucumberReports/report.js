@@ -7,7 +7,7 @@ formatter.feature({
   "keyword": "Feature"
 });
 formatter.before({
-  "duration": 753262191,
+  "duration": 662908586,
   "status": "passed"
 });
 formatter.scenario({
@@ -58,25 +58,25 @@ formatter.match({
   "location": "Sapphire_StepDefs.openURL(String)"
 });
 formatter.result({
-  "duration": 46138509404,
+  "duration": 16656439040,
   "status": "passed"
 });
 formatter.match({
   "location": "PhpTravels.click_login_icon()"
 });
 formatter.result({
-  "duration": 24102025944,
+  "duration": 22424712960,
   "status": "passed"
 });
 formatter.match({
   "location": "PhpTravels.loginUser(DataTable)"
 });
 formatter.result({
-  "duration": 5796165713,
+  "duration": 5559292587,
   "status": "passed"
 });
 formatter.after({
-  "duration": 10630816381,
+  "duration": 1486717013,
   "status": "passed"
 });
 formatter.uri("com/automation/features/myfeature.feature");
@@ -88,7 +88,7 @@ formatter.feature({
   "keyword": "Feature"
 });
 formatter.before({
-  "duration": 234667,
+  "duration": 275200,
   "status": "passed"
 });
 formatter.background({
@@ -156,39 +156,39 @@ formatter.match({
   "location": "Sapphire_StepDefs.openURL(String)"
 });
 formatter.result({
-  "duration": 15238137904,
+  "duration": 11503583573,
   "status": "passed"
 });
 formatter.match({
   "location": "Sapphire_StepDefs.clickSearchbox()"
 });
 formatter.result({
-  "duration": 593155319,
+  "duration": 822340266,
   "status": "passed"
 });
 formatter.match({
   "location": "Sapphire_StepDefs.verifyElement()"
 });
 formatter.result({
-  "duration": 623024584,
+  "duration": 715133440,
   "status": "passed"
 });
 formatter.match({
   "location": "Sapphire_StepDefs.enterSearchText(DataTable)"
 });
 formatter.result({
-  "duration": 1940165896,
+  "duration": 792465494,
   "status": "passed"
 });
 formatter.match({
   "location": "Sapphire_StepDefs.clickSearchIcon()"
 });
 formatter.result({
-  "duration": 679085669,
+  "duration": 848628480,
   "status": "passed"
 });
 formatter.after({
-  "duration": 1632219689,
+  "duration": 1381021440,
   "status": "passed"
 });
 });
