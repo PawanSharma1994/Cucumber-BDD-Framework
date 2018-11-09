@@ -12,6 +12,8 @@ public interface SupportedBrowsers {
 	String CHROME = "Chrome";
 	String FIREFOX = "Firefox";
 	String MSEdge = "MSEdge";
+	String GRID_CHROME = "Grid_Chrome";
+	String GRID_FIREFOX = "Grid_Firefox";
 
 	/**
 	 * @author pawan
