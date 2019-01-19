@@ -5,13 +5,8 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = { "src/test/java" }, glue = { "com.automation.StepDefinitions" }, tags = {"@php,@test1"},format={"pretty","html:CucumberReports"}) // separate
-																											// with
-																											// ,
-																											// to
-																											// pass
-																											// multiple
-																											// tags
+@CucumberOptions(features = { "src/test/java" }, glue = { "com.automation.StepDefinitions" }, tags = {"@php"},plugin={"pretty","html:CucumberReports"})
+																											
 public class CucumberRunnerTest {
 
 }

@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import com.automation.commonutils.DataHandler;
 import com.automation.functionLib.WebApp;
 import com.codoid.products.exception.FilloException;
-import cucumber.api.DataTable;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -12,6 +11,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 
 public class Sapphire_StepDefs {
 
@@ -54,8 +54,8 @@ public class Sapphire_StepDefs {
 
 	@And("^I log into my Account$")
 	public void login(DataTable table) throws InterruptedException {
-		WebApp.get().sendKeys(userName, DataHandler.getDataFromCucumberTable(table, 1, 0));
-		WebApp.get().sendKeys(password, DataHandler.getDataFromCucumberTable(table, 1, 1));
+		WebApp.get().sendKeys(userName, DataHandler.getDataFromCucumberTable(table,""));
+		WebApp.get().sendKeys(password, DataHandler.getDataFromCucumberTable(table,""));
 		WebApp.get().elementClick(loginBtn);
 	}
 
@@ -77,7 +77,7 @@ public class Sapphire_StepDefs {
 
 	@And("^I enter the text$")
 	public void enterSearchText(DataTable table) {
-		WebApp.get().sendKeys(searchBox, DataHandler.getDataFromCucumberTable(table, 0, 1));
+		WebApp.get().sendKeys(searchBox, DataHandler.getDataFromCucumberTable(table,"SearchText"));
 		// id not working for edge browser use name or other attrb
 	}
 

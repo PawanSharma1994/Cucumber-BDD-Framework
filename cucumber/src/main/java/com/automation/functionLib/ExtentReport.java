@@ -16,7 +16,7 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import cucumber.api.Scenario;
 
-public class ExtentReport implements Log4Interface{
+public class ExtentReport implements Log4Interface {
 
 	private static final String EXTENTREPORTPATH = System.getProperty("user.dir") + "\\Reports\\";
 	private static String reportName;

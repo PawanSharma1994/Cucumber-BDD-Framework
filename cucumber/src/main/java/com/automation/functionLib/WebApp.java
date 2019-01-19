@@ -52,6 +52,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private WebApp() {
+
 		if (webapp != null) {
 			throw new RuntimeException("use get() method");
 		}
@@ -137,7 +138,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	private void launchChrome() throws IOException {
 		ChromeOptions options = new ChromeOptions();
-		options.setBinary(PropertyFileReader.getProperty("CHROME_BINARY_PATH")).toString().trim();
+		options.setBinary(PropertyFileReader.getProperty("CHROME_BINARY_PATH")).toString();
 		options.addArguments("--disable-extensions");
 		log.info("--disable extentions--");
 		options.addArguments("--disable-popup-blocking");
@@ -350,7 +351,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
-	 * To verify if element is present on the page
+	 * To verify if element is not present on the page
 	 * 
 	 * @author pawan
 	 * @param element

@@ -32,41 +32,20 @@
 
 	<dependencies>
 
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>4.2.2</version>
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-junit -->
+		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-picocontainer -->
 		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-junit</artifactId>
-			<version>1.2.5</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-java -->
-		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<version>1.2.5</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-jvm-deps -->
-		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-jvm-deps</artifactId>
-			<version>1.0.5</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-picocontainer -->
-		<dependency>
-			<groupId>info.cukes</groupId>
+			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-picocontainer</artifactId>
-			<version>1.2.5</version>
+			<version>4.2.2</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
@@ -124,12 +103,15 @@
 			<version>2.0.12</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.github.mkolisnyk/cucumber-reports -->
+		<dependency>
+			<groupId>com.github.mkolisnyk</groupId>
+			<artifactId>cucumber-reports</artifactId>
+			<version>1.3.5</version>
+			<type>pom</type>
+		</dependency>
+
 	</dependencies>
 
-	<!-- <build> <sourceDirectory>C:\Users\pawan\Sapphire\Cucumber-BDD-Framework\cucumber\src\test\java</sourceDirectory> 
-		<testSourceDirectory>C:\Users\pawan\Sapphire\Cucumber-BDD-Framework\cucumber\src\test\java</testSourceDirectory> 
-		<resources> <resource> <directory>C:\Users\pawan\Sapphire\Cucumber-BDD-Framework\cucumber\src\test\java</directory> 
-		</resource> </resources> <testResources> <testResource> <directory>C:\Users\pawan\Sapphire\Cucumber-BDD-Framework\cucumber\src\test\java</directory> 
-		</testResource> </testResources> </build> -->
 	<artifactId>sapphire</artifactId>
 </project>
