@@ -1,6 +1,7 @@
 package com.automation.functionLib;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.log4j.LogManager;
@@ -24,6 +25,7 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -46,11 +48,11 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	private WebDriverWait wait;
 	private String selectBrowser = null;
 	private boolean headlessBrowserFlag = false;
-	private String headlessBrowser = null;
 	private static WebApp webapp;
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private WebApp() {
+
 		if (webapp != null) {
 			throw new RuntimeException("use get() method");
 		}
@@ -108,15 +110,17 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 
 	public void launchBrowser(String url) throws IOException {
 		selectBrowser = PropertyFileReader.getProperty("TEST_BROWSER").trim();
-		headlessBrowser = PropertyFileReader.getProperty("HEADLESS_MODE").trim();
+		String headlessBrowser = PropertyFileReader.getProperty("HEADLESS_MODE").trim();
 		log.info("Browser Selected is " + selectBrowser);
 		if (headlessBrowser.equalsIgnoreCase("Yes")) {
 			headlessBrowserFlag = true;
 			log.info("running in headless mode");
 		}
-		if (selectBrowser.equalsIgnoreCase(SupportedBrowsers.CHROME)) {
+		if (selectBrowser.equalsIgnoreCase(SupportedBrowsers.CHROME)
+				|| selectBrowser.equalsIgnoreCase(SupportedBrowsers.GRID_CHROME)) {
 			launchChrome();
-		} else if (selectBrowser.equalsIgnoreCase(SupportedBrowsers.FIREFOX)) {
+		} else if (selectBrowser.equalsIgnoreCase(SupportedBrowsers.FIREFOX)
+				|| selectBrowser.equalsIgnoreCase(SupportedBrowsers.GRID_FIREFOX)) {
 			launchFireFox();
 		} else if (selectBrowser.equalsIgnoreCase(SupportedBrowsers.MSEdge)) {
 			launchEdge();
@@ -133,24 +137,31 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	private void launchChrome() throws IOException {
-		System.setProperty("webdriver.chrome.driver", PropertyFileReader.getProperty("CHROME_DRIVER_PATH").trim());
 		ChromeOptions options = new ChromeOptions();
-		options.setBinary(PropertyFileReader.getProperty("CHROME_BINARY_PATH")).toString().trim();
+		options.setBinary(PropertyFileReader.getProperty("CHROME_BINARY_PATH")).toString();
 		options.addArguments("--disable-extensions");
 		log.info("--disable extentions--");
 		options.addArguments("--disable-popup-blocking");
 		log.info("--disable pop-up blocking--");
 		options.setHeadless(headlessBrowserFlag);
-		driver = new ChromeDriver(options);
+		if (selectBrowser.toLowerCase().contains("grid")) {
+			driver = new RemoteWebDriver(new URL(PropertyFileReader.getProperty("HUB_URL")), options);
+		} else {
+			System.setProperty("webdriver.chrome.driver", PropertyFileReader.getProperty("CHROME_DRIVER_PATH").trim());
+			driver = new ChromeDriver(options);
+		}
 	}
 
 	private void launchFireFox() throws IOException {
-		System.setProperty("webdriver.gecko.driver", PropertyFileReader.getProperty("FIREFOX_DRIVER_PATH").trim());
 		FirefoxOptions options = new FirefoxOptions();
 		options.setBinary(PropertyFileReader.getProperty("FIREFOX_BINARY_PATH")).toString();
 		options.setHeadless(headlessBrowserFlag);
-		driver = new FirefoxDriver(options);
-
+		if (selectBrowser.toLowerCase().contains("grid")) {
+			driver = new RemoteWebDriver(new URL(PropertyFileReader.getProperty("HUB_URL")), options);
+		} else {
+			System.setProperty("webdriver.gecko.driver", PropertyFileReader.getProperty("FIREFOX_DRIVER_PATH").trim());
+			driver = new FirefoxDriver(options);
+		}
 	}
 
 	private void launchEdge() throws IOException {
@@ -340,7 +351,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
-	 * To verify if element is present on the page
+	 * To verify if element is not present on the page
 	 * 
 	 * @author pawan
 	 * @param element
@@ -546,7 +557,7 @@ public final class WebApp extends ExtentReport implements Log4Interface, Support
 	}
 
 	/**
-	 * Verify text if it is present in the pdf file
+	 * Verify if text is present in the pdf file
 	 * 
 	 * @author pawan
 	 * @param matchers

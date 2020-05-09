@@ -1,18 +1,18 @@
 package com.automation.commonutils;
 
-import java.util.List;
+
+import java.util.Map;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import com.codoid.products.exception.FilloException;
 import com.codoid.products.fillo.Connection;
 import com.codoid.products.fillo.Fillo;
 import com.codoid.products.fillo.Recordset;
-import cucumber.api.DataTable;
 import cucumber.api.Scenario;
+import io.cucumber.datatable.DataTable;
 
 public class DataHandler implements Log4Interface{
 
-	private static String tempData;
 	private static Fillo filo = new Fillo();
 	private static Connection con;
 	private static Recordset recordsetFetchData;
@@ -20,20 +20,16 @@ public class DataHandler implements Log4Interface{
 	private static String tempScenarioName = "";
 	private Logger logger = LogManager.getLogger(DataHandler.class);
 
+	
 	/**
-	 * @author pawan
+	 * To get the value of column from cucumber data table <K,V>
 	 * @param table
-	 * @param row
-	 * @param column
-	 * @return Data present in column
-	 * @throws IndexOutOfBoundsException
+	 * @param colName
 	 */
 	
-	public static final String getDataFromCucumberTable(DataTable table, int row, int column) throws IndexOutOfBoundsException{
-		List<List<String>> data = table.raw();
-		tempData = data.get(row).get(column);
-		log.info("Data from table is:" + tempData);
-		return tempData;
+	public static final String getDataFromCucumberTable(DataTable table,String colName) {
+		Map<String,String> data = table.asMap(String.class,String.class);
+		return data.get(colName);
 	}
 
 	public static void getScenarioName(Scenario scenario) {

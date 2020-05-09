@@ -7,9 +7,9 @@ import org.openqa.selenium.support.PageFactory;
 import com.automation.commonutils.DataHandler;
 import com.automation.functionLib.WebApp;
 
-import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 
 public class PhpTravels {
 
@@ -45,9 +45,9 @@ public class PhpTravels {
 	@And("^I login using credentials$")
 	public void loginUser(DataTable table) throws InterruptedException {
 		WebApp.get().switchToNewWindow();
-		WebApp.get().sendKeys(username, DataHandler.getDataFromCucumberTable(table, 0, 0));
-		WebApp.get().sendKeys(password, DataHandler.getDataFromCucumberTable(table, 0, 1));
+		WebApp.get().sendKeys(username, DataHandler.getDataFromCucumberTable(table,"UserName"));
+		WebApp.get().sendKeys(password, DataHandler.getDataFromCucumberTable(table,"Password"));
 		WebApp.get().waitClickElement(loginBtn);
 	}
-
+	
 }

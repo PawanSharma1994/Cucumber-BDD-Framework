@@ -13,7 +13,7 @@ public class PDFReader implements Log4Interface {
 	private static PDFReader pdfreader;
 
 	private PDFReader() {
-		if (pdfreader == null) {
+		if (pdfreader != null) {
 			throw new RuntimeException("Use getPDFReader method");
 		}
 	}
